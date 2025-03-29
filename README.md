@@ -15,8 +15,7 @@ This C++ project reads a context-free grammar (CFG) from a file and performs:
 ## Usage
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/yourusername/LL1-Parser.git
-   cd LL1-Parser
+   git clone https://github.com/junaidzeb123/LL-1-Parcer-c-.git
    ```
 2. **Compile:**
    ```bash
@@ -24,7 +23,7 @@ This C++ project reads a context-free grammar (CFG) from a file and performs:
    ```
 3. **Run:**
    ```bash
-   ./ll1parser input.cfg
+   ./ll1parser
    ```
 
 ## Example CFG
