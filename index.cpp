@@ -1,24 +1,35 @@
-// #include <algorithm>
-// #include <fstream>
-// #include <iostream>
-// #include <map>
-// #include <set>
-// #include <sstream>
-// #include <string>
-// #include <unordered_map>
-// #include <vector>
-#include <fstream>
-#include <bits/stdc++.h>
-using namespace std;
+#define EPSILON "ε"
 
+#include <bits/stdc++.h>
+#include <fstream>
+using namespace std;
 unordered_map<string, vector<string>> cfgs;
 std::vector<std::string> order;
 int terminalAdded = 0;
 
-void followHelper2(
-    string x,
-    unordered_map<string, set<string>> &followSet,
-    unordered_map<string, set<string>> firstsets);
+set<string> terminals = {
+    "id",
+    "num",
+    "int",
+    "float",
+    "double",
+    "char",
+    "bool",
+    "void",
+    "if",
+    "else",
+    "while",
+    "for",
+    "do",
+    "return",
+    "break",
+    "continue", "=", "+", "-", "*", "/",
+    "<", ">", "==", "!=", "<=", ">=",
+    "&&", "||", "!",
+    "(", ")",
+    "{", "}", ";", "," , EPSILON};
+
+void followHelper2(string x, unordered_map<string, set<string>> &followSet, unordered_map<string, set<string>> firstsets);
 
 string longestCommonPrefix(vector<string> &arr) {
 
@@ -34,7 +45,41 @@ string longestCommonPrefix(vector<string> &arr) {
         i++;
     }
 
-    return first.substr(0, i);
+    string common = first.substr(0, i);
+    return find(order.begin(), order.end(), common) != order.end() ? common : "";
+}
+
+vector<string> tokenize(string prod) {
+    vector<string> tokens;
+    int i = 0;
+    while (i < prod.length()) {
+        bool matched = false;
+        // FOR ALL THE NON TERMINALS
+        for (const auto &symbol : order) { // order = all non-terminals and terminals
+            if (prod.substr(i, symbol.length()) == symbol) {
+                tokens.push_back(symbol);
+                i += symbol.length();
+                matched = true;
+                break;
+            }
+        }
+        // FOR ALL THE TERMINALS
+        if (!matched) {
+            for (const auto &symbol : terminals) { // order = all non-terminals and terminals
+                if (prod.substr(i, symbol.length()) == symbol) {
+                    tokens.push_back(symbol);
+                    i += symbol.length();
+                    matched = true;
+                    break;
+                }
+            }
+        }
+        if (!matched) {
+        //     cerr << "Unknown token at " << prod[i] << endl;
+            ++i; // skip bad character
+        }
+    }
+    return tokens;
 }
 
 void addNewRule(const string &prefix, const string &nt, vector<string> &production) {
@@ -49,8 +94,11 @@ void addNewRule(const string &prefix, const string &nt, vector<string> &producti
         auto it = find(production.begin(), production.end(), str);
         if (it != production.end()) {
             string newStr = str.substr(prefix.length());
-            if (newStr != "\"\"" && newStr != "")
+            if (newStr.empty()) {
+                newProudction.push_back(EPSILON); // explicitly add epsilon
+            } else if (newStr != EPSILON) {
                 newProudction.push_back(newStr);
+            }
             cfgs[nt].erase(cfgs[nt].begin() + j);
             j--;
         }
@@ -91,7 +139,6 @@ void leftFactoring() {
                             addNewRule(prefix, nt, currentProduction);
                             isBrokenDown = true;
                             break;
-                            ;
                         }
                     }
                 }
@@ -130,6 +177,7 @@ void readCFG(const string &filename) {
         string str = "";
         while (iss >> prod) {
             if (prod == "|") {
+                // cout << str << endl;
                 cfgs[nt].push_back(str);
                 str = "";
                 continue;
@@ -137,7 +185,7 @@ void readCFG(const string &filename) {
                 str += prod;
             }
         }
-        cfgs[nt].push_back(prod);
+        cfgs[nt].push_back(str);
         if (std::find(order.begin(), order.end(), nt) == order.end()) {
             order.push_back(nt);
         }
@@ -151,88 +199,99 @@ void displayCFG(unordered_map<string, vector<string>> mp = cfgs) {
         for (const auto &p : prods) {
             cout << nt << " -> ";
             for (char c : p) {
-                if (c == 0x01)
-                    cout << "ε";
-                else
-                    cout << c;
+                // if (c == 0x01)
+                //     cout << "ε";
+                // else
+                cout << c;
             }
             cout << endl;
         }
     }
 }
 
-void leftRecursion() {
+void solveNonImmediateLR(string nameA, string nameB) {
+    // string nameA = A.getName();
+    // string nameB = B.getName();
+    vector<string> rulesA, rulesB, newRulesA;
+    rulesA = cfgs[nameA];
+    rulesB = cfgs[nameB];
+
+    for (auto rule : rulesA) {
+        if (rule.substr(0, nameB.size()) == nameB) {
+            for (auto rule1 : rulesB) {
+                newRulesA.push_back(rule1 + rule.substr(nameB.size()));
+            }
+        } else {
+            newRulesA.push_back(rule);
+        }
+    }
+    cfgs[nameA] = newRulesA;
+}
+
+// Algorithm for eliminating Immediate Left Recursion
+pair<string, vector<string>> solveImmediateLR(string name) {
+    string newName = "T" + to_string(terminalAdded);
+
+    vector<string> alphas, betas, rules, newRulesA, newRulesA1;
+    rules = cfgs[name];
+
+    // Checks if there is left recursion or not
+    for (auto rule : rules) {
+        if (rule.substr(0, name.size()) == name) {
+            alphas.push_back(rule.substr(name.size()));
+        } else {
+            betas.push_back(rule);
+        }
+    }
+
+    // If no left recursion, exit
+    if (!alphas.size())
+        return {};
+
+    if (!betas.size())
+        newRulesA.push_back(newName);
+
+    for (auto beta : betas)
+        newRulesA.push_back(beta + newName);
+
+    for (auto alpha : alphas)
+        newRulesA1.push_back(alpha + newName);
+
+    cfgs[name] = newRulesA;
+    newRulesA1.push_back(EPSILON);
+
+    terminalAdded++;
+    return {newName, newRulesA1};
+}
+
+// Eliminates left recursion
+void applyAlgorithm() {
+    int size = cfgs.size();
+
+    int i = 0;
+
+    vector<pair<string, vector<string>>> vec;
 
     for (auto &x : cfgs) {
-        string nt = x.first;
-        vector<string> production = x.second;
-
-        vector<string> newProduction;
-        string newNonTerminal = "T" + to_string(terminalAdded);
-        set<int> nonRecursiveProd;
-        int removed = 0;
-        for (int i = 0; i < production.size(); i++) {
-            string prod = production[i];
-            if (prod.length() < nt.length()) {
-                nonRecursiveProd.insert(i);
-                continue;
-            }
-            string left = prod.substr(0, nt.length());
-            if (left == nt) {
-                string right = prod.substr(nt.length());
-                cout << "Left Recurrion occuring at " << nt << " -> " << prod << "\n";
-                newProduction.push_back(right + newNonTerminal);
-                x.second.erase(x.second.begin() + i - removed);
-                removed++;
-
-            } else
-                nonRecursiveProd.insert(i);
+        // int j = 0;
+        // for (auto &y : cfgs) {
+        //     solveNonImmediateLR(x.first, y.first);
+        //     j++;
+        //     if (j >= i)
+        //         break;
+        // }
+        pair<string, vector<string>> result = solveImmediateLR(x.first);
+        i++;
+        if (result.first.empty() && result.second.empty()) {
+            continue;
         }
-        if (newProduction.size()) {
-            order.push_back("T" + to_string(terminalAdded));
-            terminalAdded++;
-            newProduction.push_back("\"\""); // pushing the episilon
-            cfgs[newNonTerminal] = newProduction;
-            cout << " size = " << x.second.size() << endl;
-            x.second.push_back(newNonTerminal);
-            int itr = 0;
-            for (auto &y : x.second) {
-                if (y != newNonTerminal) {
-                    if (itr == 0) {
-                        x.second.erase(x.second.end() - 1);
-                        itr++;
-                    }
-                    if (y != "\"\"")
-                        y = y + newNonTerminal;
-                    else
-                        y = newNonTerminal;
-                } else {
-                    break;
-                }
-            }
-        }
-    }
-}
-
-void helper(const string &current, const string &starting) {
-    if (current == starting) {
-        cout << "INDIRECT LEFT REC\n";
+        vec.push_back(result);
     }
 
-    for (auto &prod : cfgs[current]) {
-        // helper()
+    for (auto &x : vec) {
+        order.push_back(x.first);
+        cfgs.insert(x);
     }
-}
-
-void indirectRecursion() {
-    // CHECKING WHICH RULES ARE CAUSING LEFT RECURSION
-    // for (auto &x : cfgs) {
-    //     string nt = x.firt();
-    //     string production = x.second();
-
-    //     for (auto &prod : production) {
-    //     }
-    // }
 }
 
 set<string> calculatingFirstOfOneProd(
@@ -254,14 +313,14 @@ set<string> calculatingFirstOfOneProd(
 
                 for (auto &y : firstsets[str]) {
                     // IF THE FIRST OF NON TERMINAL IS EPSILON THEN WE HAVE TO LOOK FOR FIRST OF NEXT NON-TERMINAL
-                    if (y == "\"\"") {
+                    if (y == EPSILON) {
                         isEpisilon = true;
                     } else
                         st.insert(y);
                 }
                 prod = prod.substr(str.length());
                 if (prod.length() == 0 && isEpisilon) {
-                    st.insert("\"\"");
+                    st.insert(EPSILON);
                 }
                 str = "";
                 break;
@@ -269,18 +328,28 @@ set<string> calculatingFirstOfOneProd(
         }
     }
     if (!isnonTerminal) {
-        if (prod[0] != '\"') {
-            string s(1, prod[0]);
-            st.insert(s);
+        string matched_terminal = "";
+        for (const auto &t : terminals) {
+            if (prod.substr(0, t.size()) == t) {
+                if (t.size() > matched_terminal.size()) {
+                    matched_terminal = t;
+                }
+            }
+        }
+        if (!matched_terminal.empty()) {
+            st.insert(matched_terminal);
+            prod = prod.substr(matched_terminal.size());
         } else {
-            st.insert(prod.substr(0, 2));
+            // fallback if no terminal matches
+            // string s(1, prod[0]);
+            // st.insert(s);
         }
     }
+
     return st;
 }
 
 void helper(string nt, unordered_map<string, set<string>> &firstsets, set<string> nonTerminal) {
-
     vector<string> production = cfgs[nt];
     set<string> st;
 
@@ -294,7 +363,8 @@ void helper(string nt, unordered_map<string, set<string>> &firstsets, set<string
         while (isEpisilon) {
             isnonTerminal = false;
             isEpisilon = false;
-            for (auto ch : prod) {
+            vector<string> tokens = tokenize(prod);
+            for (auto ch : tokens) {
                 str += ch;
                 auto it = nonTerminal.find(str);
                 if (it != nonTerminal.end()) {
@@ -307,14 +377,14 @@ void helper(string nt, unordered_map<string, set<string>> &firstsets, set<string
 
                     for (auto &y : firstsets[str]) {
                         // IF THE FIRST OF NON TERMINAL IS EPSILON THEN WE HAVE TO LOOK FOR FIRST OF NEXT NON-TERMINAL
-                        if (y == "\"\"") {
+                        if (y == EPSILON) {
                             isEpisilon = true;
                         } else
                             st.insert(y);
                     }
                     prod = prod.substr(str.length());
                     if (prod.length() == 0 && isEpisilon) {
-                        st.insert("\"\"");
+                        st.insert(EPSILON);
                     }
                     str = "";
                     break;
@@ -322,11 +392,21 @@ void helper(string nt, unordered_map<string, set<string>> &firstsets, set<string
             }
         }
         if (!isnonTerminal) {
-            if (prod[0] != '\"') {
-                string s(1, prod[0]);
-                st.insert(s);
+            string matched_terminal = "";
+            for (const auto &t : terminals) {
+                if (prod.substr(0, t.size()) == t) {
+                    if (t.size() > matched_terminal.size()) {
+                        matched_terminal = t;
+                    }
+                }
+            }
+            if (!matched_terminal.empty()) {
+                st.insert(matched_terminal);
+                prod = prod.substr(matched_terminal.size());
             } else {
-                st.insert(prod.substr(0, 2));
+                // // fallback if no terminal matches (should not happen ideally)
+                // string s(1, prod[0]);
+                // st.insert(s);
             }
         }
     }
@@ -378,7 +458,7 @@ void followHelper(
                 isnonTerminal = true;
                 for (auto &y : firstsets[str]) {
                     // IF THE FIRST OF NON TERMINAL IS EPSILON THEN WE HAVE TO LOOK FOR FIRST OF NEXT NON-TERMINAL
-                    if (y == "\"\"") {
+                    if (y == EPSILON) {
                         isEpisilon = true;
                     } else
                         st.insert(y);
@@ -397,9 +477,22 @@ void followHelper(
         }
     }
     if (!isnonTerminal) {
-        string s(1, prod[0]);
-        st.insert(s);
-        // cout << " non terminal case here " << nonTtoCalculate << " " << s << "\n";
+        string matched_terminal = "";
+        for (const auto &t : terminals) {
+            if (prod.substr(0, t.size()) == t) {
+                if (t.size() > matched_terminal.size()) {
+                    matched_terminal = t;
+                }
+            }
+        }
+        if (!matched_terminal.empty()) {
+            st.insert(matched_terminal);
+            prod = prod.substr(matched_terminal.size());
+        } else {
+            // fallback if no terminal matches
+            // string s(1, prod[0]);
+            // st.insert(s);
+        }
     }
     followsets[nonTtoCalculate].insert(st.begin(), st.end());
 }
@@ -455,11 +548,11 @@ unordered_map<string, unordered_map<string, string>> createParsingTable(
         for (auto &production : cfgs[nt]) {
             set<string> firstAlpha = calculatingFirstOfOneProd(production, firstsets);
             for (auto &terminal : firstAlpha) {
-                if (terminal != "\"\"") {
+                if (terminal != EPSILON) {
                     table[nt][terminal] = production;
                 }
             }
-            if (firstAlpha.find("\"\"") != firstAlpha.end()) {
+            if (firstAlpha.find(EPSILON) != firstAlpha.end()) {
                 for (auto &terminal : follow[nt]) {
                     table[nt][terminal] = production;
                 }
@@ -478,23 +571,25 @@ void displayParsingTable(const unordered_map<string, unordered_map<string, strin
     }
 
     terminals.insert("$");
-
+    int width = 40;
     cout << "\nLL(1) Parsing Table:\n";
-    cout << setw(15) << left << "";
+    cout << std::left;
+    cout << setw(width) << "" ;
+
     for (auto term : terminals) {
-        cout << setw(15) << left << term;
+        cout << setw(width) << std::left << term;
     }
     cout << "\n"
-         << string(15 * (terminals.size() + 1), '-') << "\n";
+         << string(width * (terminals.size() + 1), '-') << "\n";
 
     // Print each non-terminal row.
     for (auto &nt : order) {
-        cout << setw(15) << left << nt;
+        cout << setw(width) << std::left << nt;
         for (auto term : terminals) {
             if (table.count(nt) && table.at(nt).count(term)) {
-                cout << setw(15) << left << table.at(nt).at(term);
+                cout << setw(width) << std::left << table.at(nt).at(term);
             } else {
-                cout << setw(15) << left << "";
+                cout << setw(width) << std::left << "";
             }
         }
         cout << endl;
@@ -522,7 +617,7 @@ int main() {
          << endl
          << endl;
 
-    leftRecursion();
+    applyAlgorithm();
     cout << "\nLEFT RECURSION REMOVED CFG:\n";
     displayCFG();
 

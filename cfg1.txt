@@ -1,4 +1,48 @@
 S -> <program>
+<program>       -> <stmt_list>
+
+<stmt_list>     -> <stmt> <stmt_list> | ""
+
+<stmt>          -> <assign_stmt> | <if_stmt> | <while_stmt> | <block>
+
+<assign_stmt>   -> id = <expr> ;
+
+<if_stmt>       -> if ( <expr> ) <stmt> else <stmt>
+
+<while_stmt>    -> while ( <expr> ) <stmt>
+
+<block>         -> { <stmt_list> }
+
+<expr>          -> <expr> + <term> | <expr> - <term> | <term>
+
+<term>          -> <term> * <factor> | <term> / <factor> | <factor>
+
+<factor>        -> ( <expr> ) | id | num
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+S -> <program>
 <program>        → <decl_or_stmt_list>
 
 <decl_or_stmt_list> → <decl_or_stmt> <decl_or_stmt_list> | ε

@@ -1,0 +1,579 @@
+Original CFG:
+S -> <program>
+<program> -> <decl_or_stmt_list>
+<decl_or_stmt_list> -> <decl_or_stmt><decl_or_stmt_list>
+<decl_or_stmt_list> -> ε
+<decl_or_stmt> -> <decl_stmt>
+<decl_or_stmt> -> <func_def>
+<decl_or_stmt> -> <stmt>
+<decl_stmt> -> <type><init_decl_list>;
+<init_decl_list> -> <init_decl>
+<init_decl_list> -> <init_decl>,<init_decl_list>
+<init_decl> -> id
+<init_decl> -> id=<expr>
+<type> -> bool
+<type> -> char
+<type> -> double
+<type> -> float
+<type> -> int
+<type> -> void
+<func_def> -> <type>id(<param_list>)<block>
+<param_list> -> <param>
+<param_list> -> <param>,<param_list>
+<param_list> -> ε
+<param> -> <type>id
+<stmt> -> <assign_stmt>
+<stmt> -> <block>
+<stmt> -> <break_stmt>
+<stmt> -> <continue_stmt>
+<stmt> -> <decl_stmt>
+<stmt> -> <do_while_stmt>
+<stmt> -> <for_stmt>
+<stmt> -> <if_stmt>
+<stmt> -> <return_stmt>
+<stmt> -> <while_stmt>
+<assign_stmt> -> id=<expr>;
+<if_stmt> -> if(<expr>)<stmt>else<stmt>
+<while_stmt> -> while(<expr>)<stmt>
+<for_stmt> -> for(<for_init>;<expr>;<for_iter>)<stmt>
+<for_init> -> <assign_stmt>
+<for_init> -> <decl_stmt>
+<for_init> -> ε
+<for_iter> -> <assign_stmt>
+<for_iter> -> ε
+<do_while_stmt> -> do<stmt>while(<expr>);
+<return_stmt> -> return;
+<return_stmt> -> return<expr>;
+<break_stmt> -> break;
+<continue_stmt> -> continue;
+<block> -> {<stmt_list>}
+<stmt_list> -> <stmt><stmt_list>
+<stmt_list> -> ε
+<expr> -> <expr>+<term>
+<expr> -> <expr>-<term>
+<expr> -> <term>
+<term> -> <term>*<factor>|<term>/<factor>|<factor>
+<factor> -> (<expr>)
+<factor> -> <function_call>
+<factor> -> id
+<factor> -> num
+<function_call> -> id(<arg_list>)
+<arg_list> -> <expr>
+<arg_list> -> <expr>,<arg_list>
+<arg_list> -> ε
+
+
+
+
+Starting left Factoring algorithm again
+Runnig for <arg_list>
+Prefix for <arg_list> 
+Prefix for <arg_list> <expr>
+Breaking down <arg_list> production with prefix <expr>
+Added new Non Terminal T0
+
+Starting left Factoring algorithm again
+Runnig for T0
+Prefix for T0 
+Runnig for <stmt>
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Runnig for <func_def>
+Runnig for <init_decl>
+Prefix for <init_decl> 
+Runnig for <init_decl_list>
+Prefix for <init_decl_list> <init_decl>
+Breaking down <init_decl_list> production with prefix <init_decl>
+Added new Non Terminal T1
+Runnig for <assign_stmt>
+Runnig for <type>
+Prefix for <type> 
+Prefix for <type> 
+Prefix for <type> 
+Prefix for <type> 
+Prefix for <type> 
+Prefix for <type> 
+Prefix for <type> 
+Prefix for <type> 
+Prefix for <type> 
+Prefix for <type> 
+Prefix for <type> 
+Prefix for <type> 
+Prefix for <type> 
+Prefix for <type> 
+Prefix for <type> 
+Runnig for <while_stmt>
+Runnig for <decl_stmt>
+Runnig for <decl_or_stmt_list>
+Prefix for <decl_or_stmt_list> 
+Runnig for <for_init>
+Prefix for <for_init> 
+Prefix for <for_init> 
+Prefix for <for_init> 
+Runnig for <param_list>
+Prefix for <param_list> 
+Prefix for <param_list> <param>
+Breaking down <param_list> production with prefix <param>
+Added new Non Terminal T2
+Runnig for <decl_or_stmt>
+Prefix for <decl_or_stmt> 
+Prefix for <decl_or_stmt> 
+Prefix for <decl_or_stmt> 
+Runnig for <program>
+Runnig for <param>
+Runnig for T1
+Prefix for T1 
+Runnig for <for_stmt>
+Runnig for <block>
+Runnig for <if_stmt>
+Runnig for <for_iter>
+Prefix for <for_iter> 
+Runnig for T2
+Prefix for T2 
+Runnig for <do_while_stmt>
+Runnig for <stmt_list>
+Prefix for <stmt_list> 
+Runnig for <break_stmt>
+Runnig for <term>
+Runnig for <continue_stmt>
+Runnig for <expr>
+Prefix for <expr> 
+Prefix for <expr> <expr>
+Breaking down <expr> production with prefix <expr>
+Added new Non Terminal T3
+Runnig for S
+Runnig for <return_stmt>
+Prefix for <return_stmt> 
+Runnig for <factor>
+Prefix for <factor> 
+Prefix for <factor> 
+Prefix for <factor> 
+Prefix for <factor> 
+Prefix for <factor> 
+Prefix for <factor> 
+Runnig for <function_call>
+Runnig for <arg_list>
+Prefix for <arg_list> 
+
+Starting left Factoring algorithm again
+Runnig for T3
+Prefix for T3 
+Runnig for T0
+Prefix for T0 
+Runnig for <stmt>
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Prefix for <stmt> 
+Runnig for <func_def>
+Runnig for <init_decl>
+Prefix for <init_decl> 
+Runnig for <init_decl_list>
+Runnig for <assign_stmt>
+Runnig for <type>
+Prefix for <type> 
+Prefix for <type> 
+Prefix for <type> 
+Prefix for <type> 
+Prefix for <type> 
+Prefix for <type> 
+Prefix for <type> 
+Prefix for <type> 
+Prefix for <type> 
+Prefix for <type> 
+Prefix for <type> 
+Prefix for <type> 
+Prefix for <type> 
+Prefix for <type> 
+Prefix for <type> 
+Runnig for <while_stmt>
+Runnig for <decl_stmt>
+Runnig for <decl_or_stmt_list>
+Prefix for <decl_or_stmt_list> 
+Runnig for <for_init>
+Prefix for <for_init> 
+Prefix for <for_init> 
+Prefix for <for_init> 
+Runnig for <param_list>
+Prefix for <param_list> 
+Runnig for <decl_or_stmt>
+Prefix for <decl_or_stmt> 
+Prefix for <decl_or_stmt> 
+Prefix for <decl_or_stmt> 
+Runnig for <program>
+Runnig for <param>
+Runnig for T1
+Prefix for T1 
+Runnig for <for_stmt>
+Runnig for <block>
+Runnig for <if_stmt>
+Runnig for <for_iter>
+Prefix for <for_iter> 
+Runnig for T2
+Prefix for T2 
+Runnig for <do_while_stmt>
+Runnig for <stmt_list>
+Prefix for <stmt_list> 
+Runnig for <break_stmt>
+Runnig for <term>
+Runnig for <continue_stmt>
+Runnig for <expr>
+Prefix for <expr> 
+Runnig for S
+Runnig for <return_stmt>
+Prefix for <return_stmt> 
+Runnig for <factor>
+Prefix for <factor> 
+Prefix for <factor> 
+Prefix for <factor> 
+Prefix for <factor> 
+Prefix for <factor> 
+Prefix for <factor> 
+Runnig for <function_call>
+Runnig for <arg_list>
+Prefix for <arg_list> 
+
+Left Factored CFG:
+S -> <program>
+<program> -> <decl_or_stmt_list>
+<decl_or_stmt_list> -> <decl_or_stmt><decl_or_stmt_list>
+<decl_or_stmt_list> -> ε
+<decl_or_stmt> -> <decl_stmt>
+<decl_or_stmt> -> <func_def>
+<decl_or_stmt> -> <stmt>
+<decl_stmt> -> <type><init_decl_list>;
+<init_decl_list> -> <init_decl>T1
+<init_decl> -> id
+<init_decl> -> id=<expr>
+<type> -> bool
+<type> -> char
+<type> -> double
+<type> -> float
+<type> -> int
+<type> -> void
+<func_def> -> <type>id(<param_list>)<block>
+<param_list> -> <param>T2
+<param_list> -> ε
+<param> -> <type>id
+<stmt> -> <assign_stmt>
+<stmt> -> <block>
+<stmt> -> <break_stmt>
+<stmt> -> <continue_stmt>
+<stmt> -> <decl_stmt>
+<stmt> -> <do_while_stmt>
+<stmt> -> <for_stmt>
+<stmt> -> <if_stmt>
+<stmt> -> <return_stmt>
+<stmt> -> <while_stmt>
+<assign_stmt> -> id=<expr>;
+<if_stmt> -> if(<expr>)<stmt>else<stmt>
+<while_stmt> -> while(<expr>)<stmt>
+<for_stmt> -> for(<for_init>;<expr>;<for_iter>)<stmt>
+<for_init> -> <assign_stmt>
+<for_init> -> <decl_stmt>
+<for_init> -> ε
+<for_iter> -> <assign_stmt>
+<for_iter> -> ε
+<do_while_stmt> -> do<stmt>while(<expr>);
+<return_stmt> -> return;
+<return_stmt> -> return<expr>;
+<break_stmt> -> break;
+<continue_stmt> -> continue;
+<block> -> {<stmt_list>}
+<stmt_list> -> <stmt><stmt_list>
+<stmt_list> -> ε
+<expr> -> <expr>T3
+<expr> -> <term>
+<term> -> <term>*<factor>|<term>/<factor>|<factor>
+<factor> -> (<expr>)
+<factor> -> <function_call>
+<factor> -> id
+<factor> -> num
+<function_call> -> id(<arg_list>)
+<arg_list> -> <expr>T0
+<arg_list> -> ε
+T0 -> ,<arg_list>
+T0 -> ε
+T1 -> ,<init_decl_list>
+T1 -> ε
+T2 -> ,<param_list>
+T2 -> ε
+T3 -> +<term>
+T3 -> -<term>
+
+
+
+
+LEFT RECURSION REMOVED CFG:
+S -> <program>
+<program> -> <decl_or_stmt_list>
+<decl_or_stmt_list> -> <decl_or_stmt><decl_or_stmt_list>
+<decl_or_stmt_list> -> ε
+<decl_or_stmt> -> <decl_stmt>
+<decl_or_stmt> -> <func_def>
+<decl_or_stmt> -> <stmt>
+<decl_stmt> -> <type><init_decl_list>;
+<init_decl_list> -> <init_decl>T1
+<init_decl> -> id
+<init_decl> -> id=<expr>
+<type> -> bool
+<type> -> char
+<type> -> double
+<type> -> float
+<type> -> int
+<type> -> void
+<func_def> -> <type>id(<param_list>)<block>
+<param_list> -> <param>T2
+<param_list> -> ε
+<param> -> <type>id
+<stmt> -> <assign_stmt>
+<stmt> -> <block>
+<stmt> -> <break_stmt>
+<stmt> -> <continue_stmt>
+<stmt> -> <decl_stmt>
+<stmt> -> <do_while_stmt>
+<stmt> -> <for_stmt>
+<stmt> -> <if_stmt>
+<stmt> -> <return_stmt>
+<stmt> -> <while_stmt>
+<assign_stmt> -> id=<expr>;
+<if_stmt> -> if(<expr>)<stmt>else<stmt>
+<while_stmt> -> while(<expr>)<stmt>
+<for_stmt> -> for(<for_init>;<expr>;<for_iter>)<stmt>
+<for_init> -> <assign_stmt>
+<for_init> -> <decl_stmt>
+<for_init> -> ε
+<for_iter> -> <assign_stmt>
+<for_iter> -> ε
+<do_while_stmt> -> do<stmt>while(<expr>);
+<return_stmt> -> return;
+<return_stmt> -> return<expr>;
+<break_stmt> -> break;
+<continue_stmt> -> continue;
+<block> -> {<stmt_list>}
+<stmt_list> -> <stmt><stmt_list>
+<stmt_list> -> ε
+<expr> -> <term>T5
+<term> -> T4
+<factor> -> (<expr>)
+<factor> -> <function_call>
+<factor> -> id
+<factor> -> num
+<function_call> -> id(<arg_list>)
+<arg_list> -> <expr>T0
+<arg_list> -> ε
+T0 -> ,<arg_list>
+T0 -> ε
+T1 -> ,<init_decl_list>
+T1 -> ε
+T2 -> ,<param_list>
+T2 -> ε
+T3 -> +<term>
+T3 -> -<term>
+T4 -> *<factor>|<term>/<factor>|<factor>T4
+T4 -> ε
+T5 -> T3T5
+T5 -> ε
+
+
+ FIRST SETS
+<function_call>-> id 
+<arg_list>-> * + , - ε 
+T5-> + - ε 
+<while_stmt>-> while 
+<type>-> bool char double float int void 
+<factor>-> ( id num 
+S-> bool break char continue do double float for id if int return void while { ε 
+<return_stmt>-> return 
+<stmt_list>-> bool break char continue do double float for id if int return void while { ε 
+<if_stmt>-> if 
+<block>-> { 
+<param>-> bool char double float int void 
+T3-> + - 
+T2-> , ε 
+<do_while_stmt>-> do 
+<break_stmt>-> break 
+<decl_stmt>-> bool char double float int void 
+<decl_or_stmt_list>-> bool break char continue do double float for id if int return void while { ε 
+<for_init>-> bool char double float id int void ε 
+<continue_stmt>-> continue 
+<term>-> * ε 
+<assign_stmt>-> id 
+T0-> , ε 
+<func_def>-> bool char double float int void 
+<stmt>-> bool break char continue do double float for id if int return void while { 
+<init_decl>-> id 
+<init_decl_list>-> id 
+<decl_or_stmt>-> bool break char continue do double float for id if int return void while { 
+<param_list>-> bool char double float int void ε 
+<program>-> bool break char continue do double float for id if int return void while { ε 
+<for_stmt>-> for 
+T1-> , ε 
+<for_iter>-> id ε 
+<expr>-> * + - ε 
+T4-> * ε 
+
+
+
+
+
+ FOLLOW SETS
+<function_call>-> 
+<function_call>-> 
+T3-> ) + , - ; 
+<init_decl>-> , ; 
+<program>-> $ 
+T1-> ; 
+<for_stmt>-> $ bool break char continue do double else float for id if int return void while { } 
+<param>-> ) , 
+<block>-> $ bool break char continue do double else float for id if int return void while { } 
+<init_decl_list>-> ; 
+<while_stmt>-> $ bool break char continue do double else float for id if int return void while { } 
+<type>-> id 
+<stmt_list>-> } 
+<stmt>-> $ bool break char continue do double else float for id if int return void while { } 
+<decl_stmt>-> $ ; bool break char continue do double else float for id if int return void while { } 
+<for_init>-> ; 
+<decl_or_stmt_list>-> $ 
+<decl_or_stmt>-> $ bool break char continue do double float for id if int return void while { 
+<param_list>-> ) 
+<factor>-> 
+<return_stmt>-> $ bool break char continue do double else float for id if int return void while { } 
+S-> $ 
+<func_def>-> $ bool break char continue do double float for id if int return void while { 
+T0-> ) 
+<assign_stmt>-> $ ) ; bool break char continue do double else float for id if int return void while { } 
+<for_iter>-> ) 
+<if_stmt>-> $ bool break char continue do double else float for id if int return void while { } 
+T2-> ) 
+<do_while_stmt>-> $ bool break char continue do double else float for id if int return void while { } 
+<break_stmt>-> $ bool break char continue do double else float for id if int return void while { } 
+<term>-> ) + , - / ; 
+<continue_stmt>-> $ bool break char continue do double else float for id if int return void while { } 
+T4-> ) + , - / ; 
+<expr>-> ) , ; 
+T5-> ) , ; 
+<arg_list>-> ) 
+
+LL(1) Parsing Table:
+                                        $                                       (                                       )                                       *                                       +                                       ,                                       -                                       /                                       ;                                       bool                                    break                                   char                                    continue                                do                                      double                                  float                                   for                                     id                                      if                                      int                                     num                                     return                                  void                                    while                                   {                                       }                                       
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+S                                       <program>                                                                                                                                                                                                                                                                                                                                                               <program>                               <program>                               <program>                               <program>                               <program>                               <program>                               <program>                               <program>                               <program>                               <program>                               <program>                                                                       <program>                               <program>                               <program>                               <program>                                                                       
+<program>                               <decl_or_stmt_list>                                                                                                                                                                                                                                                                                                                                                     <decl_or_stmt_list>                     <decl_or_stmt_list>                     <decl_or_stmt_list>                     <decl_or_stmt_list>                     <decl_or_stmt_list>                     <decl_or_stmt_list>                     <decl_or_stmt_list>                     <decl_or_stmt_list>                     <decl_or_stmt_list>                     <decl_or_stmt_list>                     <decl_or_stmt_list>                                                             <decl_or_stmt_list>                     <decl_or_stmt_list>                     <decl_or_stmt_list>                     <decl_or_stmt_list>                                                             
+<decl_or_stmt_list>                     ε                                                                                                                                                                                                                                                                                                                                                                      <decl_or_stmt><decl_or_stmt_list>       <decl_or_stmt><decl_or_stmt_list>       <decl_or_stmt><decl_or_stmt_list>       <decl_or_stmt><decl_or_stmt_list>       <decl_or_stmt><decl_or_stmt_list>       <decl_or_stmt><decl_or_stmt_list>       <decl_or_stmt><decl_or_stmt_list>       <decl_or_stmt><decl_or_stmt_list>       <decl_or_stmt><decl_or_stmt_list>       <decl_or_stmt><decl_or_stmt_list>       <decl_or_stmt><decl_or_stmt_list>                                               <decl_or_stmt><decl_or_stmt_list>       <decl_or_stmt><decl_or_stmt_list>       <decl_or_stmt><decl_or_stmt_list>       <decl_or_stmt><decl_or_stmt_list>                                               
+<decl_or_stmt>                                                                                                                                                                                                                                                                                                                                                                                                  <stmt>                                  <stmt>                                  <stmt>                                  <stmt>                                  <stmt>                                  <stmt>                                  <stmt>                                  <stmt>                                  <stmt>                                  <stmt>                                  <stmt>                                                                          <stmt>                                  <stmt>                                  <stmt>                                  <stmt>                                                                          
+<decl_stmt>                                                                                                                                                                                                                                                                                                                                                                                                     <type><init_decl_list>;                                                         <type><init_decl_list>;                                                                                                 <type><init_decl_list>;                 <type><init_decl_list>;                                                                                                                                         <type><init_decl_list>;                                                                                                 <type><init_decl_list>;                                                                                                                                         
+<init_decl_list>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <init_decl>T1                                                                                                                                                                                                                                                                                                                                                           
+<init_decl>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     id=<expr>                                                                                                                                                                                                                                                                                                                                                               
+<type>                                                                                                                                                                                                                                                                                                                                                                                                          bool                                                                            char                                                                                                                    double                                  float                                                                                                                                                           int                                                                                                                     void                                                                                                                                                            
+<func_def>                                                                                                                                                                                                                                                                                                                                                                                                      <type>id(<param_list>)<block>                                                   <type>id(<param_list>)<block>                                                                                           <type>id(<param_list>)<block>           <type>id(<param_list>)<block>                                                                                                                                   <type>id(<param_list>)<block>                                                                                           <type>id(<param_list>)<block>                                                                                                                                   
+<param_list>                                                                                                            ε                                                                                                                                                                                                                                                                                      <param>T2                                                                       <param>T2                                                                                                               <param>T2                               <param>T2                                                                                                                                                       <param>T2                                                                                                               <param>T2                                                                                                                                                       
+<param>                                                                                                                                                                                                                                                                                                                                                                                                         <type>id                                                                        <type>id                                                                                                                <type>id                                <type>id                                                                                                                                                        <type>id                                                                                                                <type>id                                                                                                                                                        
+<stmt>                                                                                                                                                                                                                                                                                                                                                                                                          <decl_stmt>                             <break_stmt>                            <decl_stmt>                             <continue_stmt>                         <do_while_stmt>                         <decl_stmt>                             <decl_stmt>                             <for_stmt>                              <assign_stmt>                           <if_stmt>                               <decl_stmt>                                                                     <return_stmt>                           <decl_stmt>                             <while_stmt>                            <block>                                                                         
+<assign_stmt>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   id=<expr>;                                                                                                                                                                                                                                                                                                                                                              
+<if_stmt>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               if(<expr>)<stmt>else<stmt>                                                                                                                                                                                                                                                                                                      
+<while_stmt>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    while(<expr>)<stmt>                                                                                                     
+<for_stmt>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              for(<for_init>;<expr>;<for_iter>)<stmt>                                                                                                                                                                                                                                                                                                                                                                         
+<for_init>                                                                                                                                                                                                                                                                                                                                                              ε                                      <decl_stmt>                                                                     <decl_stmt>                                                                                                             <decl_stmt>                             <decl_stmt>                                                                     <assign_stmt>                                                                   <decl_stmt>                                                                                                             <decl_stmt>                                                                                                                                                     
+<for_iter>                                                                                                              ε                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      <assign_stmt>                                                                                                                                                                                                                                                                                                                                                           
+<do_while_stmt>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 do<stmt>while(<expr>);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+<return_stmt>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   return<expr>;                                                                                                                                                                                           
+<break_stmt>                                                                                                                                                                                                                                                                                                                                                                                                                                            break;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+<continue_stmt>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         continue;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+<block>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 {<stmt_list>}                                                                   
+<stmt_list>                                                                                                                                                                                                                                                                                                                                                                                                     <stmt><stmt_list>                       <stmt><stmt_list>                       <stmt><stmt_list>                       <stmt><stmt_list>                       <stmt><stmt_list>                       <stmt><stmt_list>                       <stmt><stmt_list>                       <stmt><stmt_list>                       <stmt><stmt_list>                       <stmt><stmt_list>                       <stmt><stmt_list>                                                               <stmt><stmt_list>                       <stmt><stmt_list>                       <stmt><stmt_list>                       <stmt><stmt_list>                       ε                                      
+<expr>                                                                                                                  <term>T5                                <term>T5                                <term>T5                                <term>T5                                <term>T5                                                                        <term>T5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+<term>                                                                                                                  T4                                      T4                                      T4                                      T4                                      T4                                      T4                                      T4                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+<factor>                                                                        (<expr>)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        id                                                                                                                      num                                                                                                                                                                                                                                             
+<function_call>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 id(<arg_list>)                                                                                                                                                                                                                                                                                                                                                          
+<arg_list>                                                                                                              ε                                      <expr>T0                                <expr>T0                                <expr>T0                                <expr>T0                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+T0                                                                                                                      ε                                                                                                                      ,<arg_list>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+T1                                                                                                                                                                                                                                              ,<init_decl_list>                                                                                                       ε                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+T2                                                                                                                      ε                                                                                                                      ,<param_list>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+T3                                                                                                                                                                                                      +<term>                                                                         -<term>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+T4                                                                                                                      ε                                      *<factor>|<term>/<factor>|<factor>T4    ε                                      ε                                      ε                                      ε                                      ε                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+T5                                                                                                                      ε                                                                              T3T5                                    ε                                      T3T5                                                                            ε                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
