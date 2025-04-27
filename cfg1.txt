@@ -23,6 +23,103 @@ S -> <program>
 
 
 
+S → <program>
+
+<program> → <global_decl_list>
+
+<global_decl_list> → <global_decl> <global_decl_list> | ε
+
+<global_decl> → <decl_stmt> | <func_def>
+
+<decl_stmt> → <type> <init_decl_list> ;
+
+<init_decl_list> → <init_decl> <init_decl_tail>
+
+<init_decl_tail> → , <init_decl> <init_decl_tail> | ε
+
+<init_decl> → id | id = <expr>
+
+<func_def> → <type> id ( <param_list> ) <block>
+
+<param_list> → <param> <param_list_tail> | ε
+
+<param_list_tail> → , <param> <param_list_tail> | ε
+
+<param> → <type> id
+
+<block> → { <stmt_list> }
+
+<stmt_list> → <stmt> <stmt_list> | ε
+
+<stmt> → <matched_stmt> | <unmatched_stmt>
+
+<matched_stmt> → if ( <expr> ) <matched_stmt> else <matched_stmt> | while ( <expr> ) <matched_stmt> | for ( <for_init> ; <expr> ; <for_iter> ) <matched_stmt> | <decl_stmt> | <assign_stmt> | <return_stmt> | <break_stmt> | <continue_stmt> | <block> | <expr_stmt>
+
+<unmatched_stmt> → if ( <expr> ) <stmt> | if ( <expr> ) <matched_stmt> else <unmatched_stmt>
+
+<assign_stmt> → id = <expr> ;
+
+<return_stmt> → return <expr_or_empty> ;
+
+<expr_or_empty> → <expr> | ε
+
+<break_stmt> → break ;
+
+<continue_stmt> → continue ;
+
+<expr_stmt> → <expr> ;
+
+<for_init> → <decl_stmt> | <assign_stmt> | ε
+
+<for_iter> → <assign_stmt> | ε
+
+<expr> → <logical_or_expr>
+
+<logical_or_expr> → <logical_and_expr> <logical_or_expr_tail>
+
+<logical_or_expr_tail> → || <logical_and_expr> <logical_or_expr_tail> | ε
+
+<logical_and_expr> → <equality_expr> <logical_and_expr_tail>
+
+<logical_and_expr_tail> → && <equality_expr> <logical_and_expr_tail> | ε
+
+<equality_expr> → <relational_expr> <equality_expr_tail>
+
+<equality_expr_tail> → == <relational_expr> <equality_expr_tail> | != <relational_expr> <equality_expr_tail> | ε
+
+<relational_expr> → <additive_expr> <relational_expr_tail>
+
+<relational_expr_tail> → < <additive_expr> <relational_expr_tail> | > <additive_expr> <relational_expr_tail> | <= <additive_expr> <relational_expr_tail> | >= <additive_expr> <relational_expr_tail> | ε
+
+<additive_expr> → <term> <additive_expr_tail>
+
+<additive_expr_tail> → + <term> <additive_expr_tail> | - <term> <additive_expr_tail> | ε
+
+<term> → <factor> <term_tail>
+
+<term_tail> → * <factor> <term_tail> | / <factor> <term_tail> | % <factor> <term_tail> | ε
+
+<factor> → ( <expr> ) | id | num | <function_call>
+<function_call> → id ( <arg_list> )
+<arg_list> → <expr> <arg_list_tail> | ε
+<arg_list_tail> → , <expr> <arg_list_tail> | ε
+
+<type> → int | float | double | char | bool | void
+
+
+
+
+
+
+S → <stmt>
+<stmt> → <decl_stmt><stmt> | <assign_stmt><stmt> | ε
+<decl_stmt> → <type> <init_decl_list> ;
+<type> → int 
+<assign_stmt> → id = <expr> ;
+<init_decl_list> → <init_decl> <init_decl_list_tail>
+<init_decl_list_tail> → , <init_decl> <init_decl_list_tail> | ε
+<init_decl> → id | id = <expr>
+<expr> -> num
 
 
 
@@ -38,70 +135,3 @@ S -> <program>
 
 
 
-
-
-
-
-S -> <program>
-<program>        → <decl_or_stmt_list>
-
-<decl_or_stmt_list> → <decl_or_stmt> <decl_or_stmt_list> | ε
-
-<decl_or_stmt>   → <decl_stmt> | <func_def> | <stmt>
-
-<decl_stmt>      → <type> <init_decl_list> ;
-
-<init_decl_list> → <init_decl> | <init_decl> , <init_decl_list>
-
-<init_decl>      → id | id = <expr>
-
-<type>           → int | float | double | char | bool | void
-
-
-<func_def>       → <type> id ( <param_list> ) <block>
-
-<param_list>     → <param> | <param> , <param_list> | ε
-
-<param>          → <type> id
-
-
-
-<stmt>           → <decl_stmt> | <assign_stmt> | <if_stmt> | <while_stmt> | <for_stmt> | <do_while_stmt> | <return_stmt> | <break_stmt> | <continue_stmt> | <block>
-                 
-<assign_stmt>    → id = <expr> ;
-
-<if_stmt>        → if ( <expr> ) <stmt> else <stmt>
-
-<while_stmt>     → while ( <expr> ) <stmt>
-
-<for_stmt>       → for ( <for_init> ; <expr> ; <for_iter> ) <stmt>
-
-<for_init>       → <decl_stmt> | <assign_stmt> | ε
-
-<for_iter>       → <assign_stmt> | ε
-
-<do_while_stmt>  → do <stmt> while ( <expr> ) ;
-
-<return_stmt>    → return <expr> ; | return ;
-
-<break_stmt>     → break ;
-
-<continue_stmt>  → continue ;
-
-<block>          → { <stmt_list> }
-
-
-
-<stmt_list>      → <stmt> <stmt_list> | ε
-
-
-
-<expr>           → <expr> + <term>  | <expr> - <term>  | <term>
-
-<term>           → <term> * <factor>| <term> / <factor>| <factor>
-
-<factor>         → ( <expr> ) | id | num | <function_call>
-
-<function_call>  → id ( <arg_list> )
-
-<arg_list>       → <expr> | <expr> , <arg_list> | ε

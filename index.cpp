@@ -8,6 +8,7 @@ std::vector<std::string> order;
 int terminalAdded = 0;
 
 set<string> terminals = {
+    "main",
     "id",
     "num",
     "int",
@@ -20,14 +21,13 @@ set<string> terminals = {
     "else",
     "while",
     "for",
-    "do",
     "return",
     "break",
-    "continue", "=", "+", "-", "*", "/",
+    "continue", "=", "+", "-", "*", "/","%",
     "<", ">", "==", "!=", "<=", ">=",
     "&&", "||", "!",
     "(", ")",
-    "{", "}", ";", "," , EPSILON};
+    "{", "}", ";", ",", EPSILON};
 
 void followHelper2(string x, unordered_map<string, set<string>> &followSet, unordered_map<string, set<string>> firstsets);
 
@@ -49,7 +49,7 @@ string longestCommonPrefix(vector<string> &arr) {
     return find(order.begin(), order.end(), common) != order.end() ? common : "";
 }
 
-vector<string> tokenize(string prod) {
+vector<string> getTokensFromProd(string prod) {
     vector<string> tokens;
     int i = 0;
     while (i < prod.length()) {
@@ -65,7 +65,9 @@ vector<string> tokenize(string prod) {
         }
         // FOR ALL THE TERMINALS
         if (!matched) {
+
             for (const auto &symbol : terminals) { // order = all non-terminals and terminals
+
                 if (prod.substr(i, symbol.length()) == symbol) {
                     tokens.push_back(symbol);
                     i += symbol.length();
@@ -75,8 +77,7 @@ vector<string> tokenize(string prod) {
             }
         }
         if (!matched) {
-        //     cerr << "Unknown token at " << prod[i] << endl;
-            ++i; // skip bad character
+            ++i;
         }
     }
     return tokens;
@@ -114,13 +115,13 @@ void leftFactoring() {
 
     // RUNNING THE LEFT FACTORING UNTIL THE GRAMMER CHANGED
     while (true) {
-        cout << "\nStarting left Factoring algorithm again\n";
+        // cout << "\nStarting left Factoring algorithm again\n";
         bool change = false;
 
         // RUNNING FOR THE PRODUCTION FOR EACH NON TERMINAL
         for (auto &x : cfgs) {
             string nt = x.first;
-            cout << "Runnig for " << nt << endl;
+            // cout << "Runnig for " << nt << endl;
             sort(cfgs[nt].begin(), cfgs[nt].end());
 
             vector<string> production = x.second;
@@ -133,7 +134,7 @@ void leftFactoring() {
                     vector<string> currentProduction(production.begin() + itr, production.begin() + itr + numberOfProduction);
                     if (currentProduction.size() > 1) {
                         string prefix = longestCommonPrefix(currentProduction);
-                        cout << "Prefix for " << nt << " " << prefix << endl;
+                        // cout << "Prefix for " << nt << " " << prefix << endl;
                         if (prefix != "") {
                             change = true;
                             addNewRule(prefix, nt, currentProduction);
@@ -363,7 +364,7 @@ void helper(string nt, unordered_map<string, set<string>> &firstsets, set<string
         while (isEpisilon) {
             isnonTerminal = false;
             isEpisilon = false;
-            vector<string> tokens = tokenize(prod);
+            vector<string> tokens = getTokensFromProd(prod);
             for (auto ch : tokens) {
                 str += ch;
                 auto it = nonTerminal.find(str);
@@ -574,7 +575,7 @@ void displayParsingTable(const unordered_map<string, unordered_map<string, strin
     int width = 40;
     cout << "\nLL(1) Parsing Table:\n";
     cout << std::left;
-    cout << setw(width) << "" ;
+    cout << setw(width) << "";
 
     for (auto term : terminals) {
         cout << setw(width) << std::left << term;
@@ -596,64 +597,132 @@ void displayParsingTable(const unordered_map<string, unordered_map<string, strin
     }
 }
 
-int main() {
+void displayParsingTable(const unordered_map<string, unordered_map<string, vector<string>>> &table) {
+    set<string> terminals;
+
+    // Collect all terminals
+    for (auto &entry : table) {
+        for (auto &cell : entry.second) {
+            terminals.insert(cell.first);
+        }
+    }
+    terminals.insert("$"); // add end marker
+
+    int width = 40;
+    cout << "\nLL(1) Parsing Table:\n";
+    cout << std::left;
+    cout << setw(width) << "";
+
+    // Print all terminal headers
+    for (auto term : terminals) {
+        cout << setw(width) << std::left << term;
+    }
+    cout << "\n"
+         << string(width * (terminals.size() + 1), '-') << "\n";
+
+    // Print each non-terminal row
+    for (auto &nt : order) {
+        cout << setw(width) << std::left << nt;
+        for (auto term : terminals) {
+            if (table.count(nt) && table.at(nt).count(term)) {
+                string production;
+                for (const auto &sym : table.at(nt).at(term)) {
+                    production += sym + " ";
+                }
+                if (!production.empty() && production.back() == ' ') {
+                    production.pop_back(); // remove trailing space
+                }
+                cout << setw(width) << std::left << production;
+            } else {
+                cout << setw(width) << std::left << "";
+            }
+        }
+        cout << endl;
+    }
+}
+
+unordered_map<string, unordered_map<string, vector<string>>> changeTableShape(const unordered_map<string, unordered_map<string, string>> tabletemp) {
+
+    unordered_map<string, unordered_map<string, vector<string>>> table;
+
+    for (auto &x : tabletemp) {
+        string nonterminal = x.first;
+        for (auto &y : x.second) {
+            string terminal = y.first;
+            string prod = y.second;
+            vector<string> tokens = getTokensFromProd(prod);
+            // if (prod == "<type>id(<param_list>)<block>") {
+            //     cout << "\n\n\n<type>id(<param_list>)<block>  -->  ";
+            //     for (auto &t : tokens) {
+            //         cout << t << " ";
+            //     }
+            // }
+            table[nonterminal][terminal] = tokens;
+        }
+    }
+    return table;
+}
+
+unordered_map<string, unordered_map<string, vector<string>>> getParcingTable() {
 
     readCFG("cfg.txt");
 
-    freopen("output.txt", "w", stdout);
-
-    cout << "Original CFG:\n";
-    displayCFG();
-
-    cout << endl
-         << endl
-         << endl;
+    // freopen("output.txt", "w", stdout);
 
     leftFactoring();
-    cout << "\nLeft Factored CFG:\n";
-    displayCFG();
-
-    cout << endl
-         << endl
-         << endl;
-
-    applyAlgorithm();
-    cout << "\nLEFT RECURSION REMOVED CFG:\n";
-    displayCFG();
+    applyAlgorithm(); // for left recursion removal
 
     unordered_map<string, set<string>> firstsets = calculateFirst();
-    cout << "\n\n FIRST SETS\n";
-    displayFirstFollow(firstsets);
-    cout << endl
-         << endl
-         << endl;
 
     unordered_map<string, set<string>> follow = calculateFollow(firstsets);
-    cout << "\n\n FOLLOW SETS\n";
-    displayFirstFollow(follow);
+    unordered_map<string, unordered_map<string, string>> tabletemp = createParsingTable(cfgs, firstsets, follow);
 
-    unordered_map<string, unordered_map<string, string>> table = createParsingTable(cfgs, firstsets, follow);
-    displayParsingTable(table);
+    return changeTableShape(tabletemp);
 }
 
-/*
+// int main() {
 
-A -> aaA
-A -> aabc | afg
-e -> ad
-B -> dd | ddb
+//     readCFG("cfg.txt");
 
+//     freopen("output.txt", "w", stdout);
 
-S  -> Stmt S
-Stmt -> ifStmt RelOp | ifStmt RelOpRelOp | ifStmt RelOp RelOp RelOp
-RelOp  -> < | > | == | <= | >= | !=
+//     cout << "Original CFG:\n";
+//     displayCFG();
 
+//     cout << endl
+//          << endl
+//          << endl;
 
-S -> BD
-B -> ""
-D -> a | AB | ""
-A -> AABd | Ba | a
-B -> Be | Bb
+//     leftFactoring();
+//     cout << "\nLeft Factored CFG:\n";
+//     displayCFG();
 
+//     cout << endl
+//          << endl
+//          << endl;
 
-*/
+//     applyAlgorithm();
+//     cout << "\nLEFT RECURSION REMOVED CFG:\n";
+//     displayCFG();
+
+//     unordered_map<string, set<string>> firstsets = calculateFirst();
+//     cout << "\n\n FIRST SETS\n";
+//     displayFirstFollow(firstsets);
+//     cout << endl
+//          << endl
+//          << endl;
+
+//     unordered_map<string, set<string>> follow = calculateFollow(firstsets);
+//     cout << "\n\n FOLLOW SETS\n";
+//     displayFirstFollow(follow);
+
+//     unordered_map<string, unordered_map<string, string>> table = createParsingTable(cfgs, firstsets, follow);
+//     displayParsingTable(table);
+
+//     cout << "TABLE # 2 \n";
+//     displayParsingTable(changeTableShape(table));
+
+//     for (auto &x : terminals) {
+//         cout << x << " ";
+//     }
+// }
