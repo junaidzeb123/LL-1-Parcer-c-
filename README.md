@@ -34,3 +34,19 @@ F -> ( E ) | id
 ```
 
 The program outputs the transformed CFG (after left factoring and left recursion removal), the computed FIRST/FOLLOW sets, and the LL(1) parsing table.
+
+
+
+# Features
+- Expression
+- if/else
+- for loop
+- while loop
+- logical operator 
+- arithimatic operator
+
+
+# Operator
+- @ --> comparison operator
+- | --> logical or
+- & --> logical and

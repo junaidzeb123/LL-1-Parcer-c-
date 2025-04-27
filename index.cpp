@@ -24,10 +24,10 @@ set<string> terminals = {
     "return",
     "break",
     "continue", "=", "+", "-", "*", "/","%",
-    "<", ">", "==", "!=", "<=", ">=",
-    "&&", "||", "!",
+    "<", ">", "@", "!=", "<=", ">=",
+    "&", "|", 
     "(", ")",
-    "{", "}", ";", ",", EPSILON};
+    "{", "}", ";", ",", "orOpt", EPSILON};
 
 void followHelper2(string x, unordered_map<string, set<string>> &followSet, unordered_map<string, set<string>> firstsets);
 
@@ -184,6 +184,9 @@ void readCFG(const string &filename) {
                 continue;
             } else {
                 str += prod;
+                if(str.length() == 5 && str == "orOpt"){ // converting orOpt in actual form
+                    str = "|";
+                }
             }
         }
         cfgs[nt].push_back(str);
@@ -670,7 +673,7 @@ unordered_map<string, unordered_map<string, vector<string>>> getParcingTable() {
     // freopen("output.txt", "w", stdout);
 
     leftFactoring();
-    applyAlgorithm(); // for left recursion removal
+    applyAlgorithm(); 
 
     unordered_map<string, set<string>> firstsets = calculateFirst();
 

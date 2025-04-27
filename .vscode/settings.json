@@ -5,6 +5,8 @@
         "unordered_map": "cpp",
         "vector": "cpp",
         "deque": "cpp",
-        "span": "cpp"
+        "span": "cpp",
+        "fstream": "cpp",
+        "ostream": "cpp"
     }
 }

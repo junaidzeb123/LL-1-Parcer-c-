@@ -8,6 +8,23 @@
 
 using namespace std;
 
+string mapTokenToTerminal(const Token &t) {
+    switch (t.type) {
+    case TokenType::IDENTIFIER:
+        return "id";
+    case TokenType::INTEGER_LITERAL:
+    case TokenType::FLOAT_LITERAL:
+        return "num";
+    case TokenType::KEYWORD: 
+        return t.value;
+    case TokenType::OPERATOR:  
+    case TokenType::PUNCTUATOR: 
+        return t.value;
+    default: 
+        return t.value;
+    }
+}
+
 string nonTerminalMeaning(const string &nt) {
     if (nt == "<program>")
         return "the entire program";
@@ -94,28 +111,11 @@ string nonTerminalMeaning(const string &nt) {
     if (nt == "<type>")
         return "a data type (int, float, double, etc.)";
 
-    return "some structure"; // fallback
+    return "some structure"; 
 }
 
-// 1) Map a lexer's Token into your grammar's terminal name:
-string mapTokenToTerminal(const Token &t) {
-    switch (t.type) {
-    case TokenType::IDENTIFIER:
-        return "id";
-    case TokenType::INTEGER_LITERAL:
-    case TokenType::FLOAT_LITERAL:
-        return "num";
-    case TokenType::KEYWORD: // keywords are terminals like "int","float",...
-        return t.value;
-    case TokenType::OPERATOR:   // "+","-","*","/", etc.
-    case TokenType::PUNCTUATOR: // "(", ")", "{", "}", ";", ","
-        return t.value;
-    default: // UNKNOWN
-        return t.value;
-    }
-}
 
-// 2) Your LL(1) parsing over a vector<string> of terminals:
+
 bool parseSequence(
     const vector<string> &tokens,
     const unordered_map<string, unordered_map<string, vector<string>>> &table,
@@ -180,17 +180,14 @@ bool parseSequence(
 }
 
 int main() {
-    // --- Step 1: Build your LL(1) table once ---
     auto parsingTable = getParcingTable();
 
-    // --- Step 2: Lex your source (unchanged lexer.cpp) ---
     ifstream file("code.txt");
     if (!file.is_open()) {
         cerr << "Error opening file!" << endl;
         return 1;
     }
 
-    // Read the entire file into a string
     stringstream buffer;
     buffer << file.rdbuf(); 
     string sourceCode = buffer.str();
@@ -199,19 +196,16 @@ int main() {
     LexicalAnalyzer lexer(sourceCode);
     vector<Token> lexed = lexer.tokenize();
 
-    // --- Step 3: Map to grammar terminals + add end-marker ---
     vector<string> tokens;
     for (auto &tk : lexed)
         tokens.push_back(mapTokenToTerminal(tk));
     tokens.push_back("$");
 
-    // (Optional) print token sequence:
     cout << "Token sequence: ";
     for (auto &s : tokens)
         cout << "'" << s << "' ";
     cout << "\n\n";
 
-    // --- Step 4: Parse ---
     bool ok = parseSequence(tokens, parsingTable, "S");
     cout << (ok ? "ACCEPTED\n" : "REJECTED\n");
     return 0;

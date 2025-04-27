@@ -39,6 +39,7 @@ private:
         keywords["int"] = TokenType::KEYWORD;
         keywords["float"] = TokenType::KEYWORD;
         keywords["double"] = TokenType::KEYWORD;
+        keywords["char"] = TokenType::KEYWORD;
         keywords["if"] = TokenType::KEYWORD;
         keywords["else"] = TokenType::KEYWORD;
         keywords["while"] = TokenType::KEYWORD;
@@ -103,54 +104,68 @@ public:
         vector<Token> tokens;
 
         while (position < input.length()) {
-            char currentChar = input[position];
+            char c = input[position];
 
             // Skip whitespace
-            if (isWhitespace(currentChar)) {
+            if (isWhitespace(c)) {
                 position++;
                 continue;
             }
 
-            // Identify keywords or identifiers
-            if (isAlpha(currentChar)) {
+            // Identifiers & keywords
+            if (isAlpha(c)) {
                 string word = getNextWord();
-                if (keywords.find(word) != keywords.end()) {
-                    tokens.emplace_back(TokenType::KEYWORD,
-                                        word);
-                } else {
-                    tokens.emplace_back(
-                        TokenType::IDENTIFIER, word);
+                if (keywords.count(word))
+                    tokens.emplace_back(TokenType::KEYWORD, word);
+                else
+                    tokens.emplace_back(TokenType::IDENTIFIER, word);
+                continue;
+            }
+
+            // Numbers
+            if (isDigit(c)) {
+                string num = getNextNumber();
+                TokenType type = (num.find('.') != string::npos)
+                                     ? TokenType::FLOAT_LITERAL
+                                     : TokenType::INTEGER_LITERAL;
+                tokens.emplace_back(type, num);
+                continue;
+            }
+
+            // Two-char operators: ==, !=, <=, >=, &&, ||
+            if ((c == '=' || c == '!' || c == '<' || c == '>' ||
+                 c == '&' || c == '|') &&
+                position + 1 < input.length()) {
+                char d = input[position + 1];
+                string two = string() + c + d;
+                if (two == "==" || two == "!=" ||
+                    two == "<=" || two == ">=" ||
+                    two == "&&" || two == "||") {
+                    tokens.emplace_back(TokenType::OPERATOR, two);
+                    position += 2;
+                    continue;
                 }
             }
-            // Identify integer or float literals
-            else if (isDigit(currentChar)) {
-                string number = getNextNumber();
-                if (number.find('.') != string::npos) {
-                    tokens.emplace_back(
-                        TokenType::FLOAT_LITERAL, number);
-                } else {
-                    tokens.emplace_back(
-                        TokenType::INTEGER_LITERAL, number);
-                }
-            }
-            // Identify operators
-            else if (currentChar == '+' || currentChar == '-' || currentChar == '*' || currentChar == '/') {
-                tokens.emplace_back(TokenType::OPERATOR,
-                                    string(1, currentChar));
+
+            // Single-char operators
+            if (c == '=' || c == '!' || c == '<' || c == '>' ||
+                c == '+' || c == '-' || c == '*' || c == '/' || c == '%' || c == '@') {
+                tokens.emplace_back(TokenType::OPERATOR, string(1, c));
                 position++;
+                continue;
             }
-            // Identify punctuators
-            else if (currentChar == '(' || currentChar == ')' || currentChar == '{' || currentChar == '}' || currentChar == ';') {
-                tokens.emplace_back(TokenType::PUNCTUATOR,
-                                    string(1, currentChar));
+
+            // Punctuators
+            if (c == '(' || c == ')' || c == '{' || c == '}' ||
+                c == ';' || c == ',') {
+                tokens.emplace_back(TokenType::PUNCTUATOR, string(1, c));
                 position++;
+                continue;
             }
-            // Handle unknown characters
-            else {
-                tokens.emplace_back(TokenType::UNKNOWN,
-                                    string(1, currentChar));
-                position++;
-            }
+
+            // Everything else
+            tokens.emplace_back(TokenType::UNKNOWN, string(1, c));
+            position++;
         }
 
         return tokens;
