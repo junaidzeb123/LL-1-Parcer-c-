@@ -1,4 +1,4 @@
-```markdown
+
 # LL(1) Parser with Lexical Analysis and Grammar Processing
 
 ## Project Description
@@ -20,8 +20,8 @@ A C++ implementation of an LL(1) parser that performs lexical analysis, grammar 
   - Type Declarations: `int`, `float`, `double`, `char`
 
 ## File Structure
+
 ```
-.
 ├── parsingtable.cpp   # Grammar processing and parsing table logic
 ├── lexer.cpp          # Lexical analyzer implementation
 ├── index.cpp          # Main driver and parser
