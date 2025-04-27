@@ -1,52 +1,88 @@
+```markdown
+# LL(1) Parser with Lexical Analysis and Grammar Processing
 
-# LL(1) Parser with Left Factoring & Left Recursion Removal
+## Project Description
+A C++ implementation of an LL(1) parser that performs lexical analysis, grammar transformations (left factoring and left recursion removal), and predictive parsing table generation. Designed to parse a subset of C-like syntax including control structures, expressions, and type declarations.
 
-## Overview
-This C++ project reads a context-free grammar (CFG) from a file and performs:
-- **Left Factoring:** Removes common prefixes.
-- **Left Recursion Removal:** Eliminates left recursion.
-- **FIRST & FOLLOW Sets Computation:** Calculates FIRST and FOLLOW sets for non-terminals.
-- **LL(1) Parsing Table Construction:** Builds the parsing table for predictive parsing.
+## Key Features
+- **Grammar Processing**
+  - Left Factoring
+  - Immediate/Non-Immediate Left Recursion Removal
+- **Compiler Components**
+  - Lexical Analyzer (Tokenizer)
+  - FIRST/FOLLOW Set Computation
+  - LL(1) Parsing Table Generation
+- **Language Support**
+  - Control Structures: `if/else`, `while`, `for`
+  - Logical Operators: `&` (AND), `|` (OR)
+  - Arithmetic Operators: `+`, `-`, `*`, `/`, `%`
+  - Relational Operators: `<`, `>`, `@` (custom comparison), `!=`
+  - Type Declarations: `int`, `float`, `double`, `char`
 
-## Files
-- **main.cpp:** Source code.
-- **input.cfg:** Sample CFG file.
-
-## Usage
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/junaidzeb123/LL-1-Parcer-c-.git
-   ```
-2. **Compile:**
-   ```bash
-   g++ main.cpp -o ll1parser
-   ```
-3. **Run:**
-   ```bash
-   ./ll1parser
-   ```
-
-## Example CFG
+## File Structure
 ```
-E -> E + T | T
-T -> T * F | F
-F -> ( E ) | id
+.
+├── parsingtable.cpp   # Grammar processing and parsing table logic
+├── lexer.cpp          # Lexical analyzer implementation
+├── index.cpp          # Main driver and parser
+├── cfg.txt            # Input context-free grammar
+├── code.txt           # Sample source code to parse
+└── parsinglogs.txt    # Output parsing log (auto-generated)
 ```
 
-The program outputs the transformed CFG (after left factoring and left recursion removal), the computed FIRST/FOLLOW sets, and the LL(1) parsing table.
+## Installation & Usage
 
+### Prerequisites
+- C++17 compiler (g++ or clang++)
+- Make (optional)
 
+### Compilation
+```bash
+g++ index.cpp -o parser -std=c++17
+```
 
-# Features
-- Expression
-- if/else
-- for loop
-- while loop
-- logical operator 
-- arithimatic operator
+### Execution
+1. Prepare your CFG in `cfg.txt`
+2. Write source code to parse in `code.txt`
+3. Run:
+```bash
+./parser
+```
 
+### Example `cfg.txt` Structure
+```txt
+S → int main ( ) { <stmt_list> }
+<stmt_list> → <stmt> <stmt_list> | ε
+<stmt> → if ( <expr> ) { <stmt_list> } <else_opt> | ...
+... (see provided cfg.txt for full syntax)
+```
 
-# Operator
-- @ --> comparison operator
-- | --> logical or
-- & --> logical and
+### Example `code.txt`
+```c
+int main() {
+  float x = 3.14;
+  if (x @ 3.14) {
+    x = x + 1;
+  }
+  return 0;
+}
+```
+
+## Output
+- **Parsing Table:** Printed to console in formatted table
+- **Parsing Logs:** Saved to `parsinglogs.txt` with:
+  - Token sequence
+  - Parsing stack operations
+  - Syntax error reports with line numbers
+  - Final ACCEPTED/REJECTED status
+
+## Error Handling
+- Skips invalid tokens during lexical analysis
+- Implements panic-mode error recovery during parsing
+- Reports line numbers for syntax errors
+
+## Custom Operators
+- `@`: Comparison operator (equivalent to `==` in C)
+- `|`: Logical OR (written as `orOpt` in CFG)
+- `&`: Logical AND
+

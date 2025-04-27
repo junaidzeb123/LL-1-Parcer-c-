@@ -21,9 +21,9 @@ enum class TokenType {
 struct Token {
     TokenType type;
     string value;
-
-    Token(TokenType t, const string &v)
-        : type(t), value(v) {
+    int lineNO;
+    Token(TokenType t, const string &v,const int lineNO)
+        : type(t), value(v),lineNO(lineNO) {
     }
 };
 
@@ -33,7 +33,7 @@ private:
     string input;
     size_t position;
     unordered_map<string, TokenType> keywords;
-
+    int line;
     // Function to initialize the keywords map
     void initKeywords() {
         keywords["int"] = TokenType::KEYWORD;
@@ -97,6 +97,7 @@ public:
     LexicalAnalyzer(const string &source)
         : input(source), position(0) {
         initKeywords();
+        line = 1;
     }
 
     // Function to tokenize the input string
@@ -105,6 +106,12 @@ public:
 
         while (position < input.length()) {
             char c = input[position];
+
+            if (c == '\n') {
+                line++;
+                position++;
+                continue;
+            }
 
             // Skip whitespace
             if (isWhitespace(c)) {
@@ -116,9 +123,9 @@ public:
             if (isAlpha(c)) {
                 string word = getNextWord();
                 if (keywords.count(word))
-                    tokens.emplace_back(TokenType::KEYWORD, word);
+                    tokens.emplace_back(TokenType::KEYWORD, word, line);
                 else
-                    tokens.emplace_back(TokenType::IDENTIFIER, word);
+                    tokens.emplace_back(TokenType::IDENTIFIER, word,line);
                 continue;
             }
 
@@ -128,7 +135,7 @@ public:
                 TokenType type = (num.find('.') != string::npos)
                                      ? TokenType::FLOAT_LITERAL
                                      : TokenType::INTEGER_LITERAL;
-                tokens.emplace_back(type, num);
+                tokens.emplace_back(type, num,line);
                 continue;
             }
 
@@ -141,7 +148,7 @@ public:
                 if (two == "==" || two == "!=" ||
                     two == "<=" || two == ">=" ||
                     two == "&&" || two == "||") {
-                    tokens.emplace_back(TokenType::OPERATOR, two);
+                    tokens.emplace_back(TokenType::OPERATOR, two,line);
                     position += 2;
                     continue;
                 }
@@ -150,7 +157,7 @@ public:
             // Single-char operators
             if (c == '=' || c == '!' || c == '<' || c == '>' ||
                 c == '+' || c == '-' || c == '*' || c == '/' || c == '%' || c == '@') {
-                tokens.emplace_back(TokenType::OPERATOR, string(1, c));
+                tokens.emplace_back(TokenType::OPERATOR, string(1, c),line);
                 position++;
                 continue;
             }
@@ -158,13 +165,13 @@ public:
             // Punctuators
             if (c == '(' || c == ')' || c == '{' || c == '}' ||
                 c == ';' || c == ',') {
-                tokens.emplace_back(TokenType::PUNCTUATOR, string(1, c));
+                tokens.emplace_back(TokenType::PUNCTUATOR, string(1, c),line);
                 position++;
                 continue;
             }
 
             // Everything else
-            tokens.emplace_back(TokenType::UNKNOWN, string(1, c));
+            tokens.emplace_back(TokenType::UNKNOWN, string(1, c),line);
             position++;
         }
 
