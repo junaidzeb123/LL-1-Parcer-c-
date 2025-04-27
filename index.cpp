@@ -1,731 +1,226 @@
-#define EPSILON "ε"
+#include "parsingtable.cpp"
+#include "lexer.cpp"
+#include <iostream>
+#include <stack>
+#include <string>
+#include <unordered_map>
+#include <vector>
 
-#include <bits/stdc++.h>
-#include <fstream>
 using namespace std;
-unordered_map<string, vector<string>> cfgs;
-std::vector<std::string> order;
-int terminalAdded = 0;
 
-set<string> terminals = {
-    "main",
-    "id",
-    "num",
-    "int",
-    "float",
-    "double",
-    "char",
-    "bool",
-    "void",
-    "if",
-    "else",
-    "while",
-    "for",
-    "return",
-    "break",
-    "continue", "=", "+", "-", "*", "/","%",
-    "<", ">", "@", "!=", "<=", ">=",
-    "&", "|", 
-    "(", ")",
-    "{", "}", ";", ",", "orOpt", EPSILON};
-
-void followHelper2(string x, unordered_map<string, set<string>> &followSet, unordered_map<string, set<string>> firstsets);
-
-string longestCommonPrefix(vector<string> &arr) {
-
-    sort(arr.begin(), arr.end());
-
-    string first = arr.front();
-    string last = arr.back();
-    int minLength = min(first.size(), last.size());
-
-    int i = 0;
-
-    while (i < minLength && first[i] == last[i]) {
-        i++;
+string mapTokenToTerminal(const Token &t) {
+    switch (t.type) {
+    case TokenType::IDENTIFIER:
+        return "id";
+    case TokenType::INTEGER_LITERAL:
+    case TokenType::FLOAT_LITERAL:
+        return "num";
+    case TokenType::KEYWORD: 
+        return t.value;
+    case TokenType::OPERATOR:  
+    case TokenType::PUNCTUATOR: 
+        return t.value;
+    default: 
+        return t.value;
     }
-
-    string common = first.substr(0, i);
-    return find(order.begin(), order.end(), common) != order.end() ? common : "";
 }
 
-vector<string> getTokensFromProd(string prod) {
+string nonTerminalMeaning(const string &nt) {
+    if (nt == "<program>")
+        return "the entire program";
+    if (nt == "<global_decl_list>")
+        return "a list of global declarations";
+    if (nt == "<global_decl>")
+        return "a global declaration (variable or function)";
+    if (nt == "<decl_stmt>")
+        return "a variable declaration statement";
+    if (nt == "<init_decl_list>")
+        return "a list of initialized declarations";
+    if (nt == "<init_decl_tail>")
+        return "additional initialized declarations";
+    if (nt == "<init_decl>")
+        return "a variable initialization";
+    if (nt == "<func_def>")
+        return "a function definition";
+    if (nt == "<param_list>")
+        return "a list of function parameters";
+    if (nt == "<param_list_tail>")
+        return "additional parameters in a function";
+    if (nt == "<param>")
+        return "a single function parameter";
+    if (nt == "<block>")
+        return "a block of statements (curly braces {...})";
+    if (nt == "<stmt_list>")
+        return "a list of statements";
+    if (nt == "<stmt>")
+        return "a statement";
+    if (nt == "<matched_stmt>")
+        return "a fully matched if-else, loop, or statement";
+    if (nt == "<unmatched_stmt>")
+        return "an incomplete if-else statement";
+    if (nt == "<assign_stmt>")
+        return "an assignment statement";
+    if (nt == "<return_stmt>")
+        return "a return statement";
+    if (nt == "<expr_or_empty>")
+        return "an expression or empty return";
+    if (nt == "<break_stmt>")
+        return "a break statement";
+    if (nt == "<continue_stmt>")
+        return "a continue statement";
+    if (nt == "<expr_stmt>")
+        return "an expression statement";
+    if (nt == "<for_init>")
+        return "the initialization part of a for-loop";
+    if (nt == "<for_iter>")
+        return "the iteration part of a for-loop";
+    if (nt == "<expr>")
+        return "an expression";
+    if (nt == "<logical_or_expr>")
+        return "a logical OR expression";
+    if (nt == "<logical_or_expr_tail>")
+        return "additional logical OR operations";
+    if (nt == "<logical_and_expr>")
+        return "a logical AND expression";
+    if (nt == "<logical_and_expr_tail>")
+        return "additional logical AND operations";
+    if (nt == "<equality_expr>")
+        return "an equality expression (==, !=)";
+    if (nt == "<equality_expr_tail>")
+        return "additional equality checks";
+    if (nt == "<relational_expr>")
+        return "a relational expression (<, >, <=, >=)";
+    if (nt == "<relational_expr_tail>")
+        return "additional relational comparisons";
+    if (nt == "<additive_expr>")
+        return "an additive expression (+, -)";
+    if (nt == "<additive_expr_tail>")
+        return "additional additive operations";
+    if (nt == "<term>")
+        return "a term in an arithmetic expression";
+    if (nt == "<term_tail>")
+        return "additional multiplicative operations (*, /, %)";
+    if (nt == "<factor>")
+        return "a factor (operand or parenthesized expression)";
+    if (nt == "<function_call>")
+        return "a function call";
+    if (nt == "<arg_list>")
+        return "a list of function call arguments";
+    if (nt == "<arg_list_tail>")
+        return "additional arguments in a function call";
+    if (nt == "<type>")
+        return "a data type (int, float, double, etc.)";
+
+    return "some structure"; 
+}
+
+
+
+bool parseSequence(
+    const vector<string> &tokens,
+    const unordered_map<string, unordered_map<string, vector<string>>> &table,
+    const string &startSymbol) {
+    stack<string> st;
+    st.push("$");
+    st.push(startSymbol);
+
+    int idx = 0;
+    while (!st.empty()) {
+        string top = st.top();
+        string curr = tokens[idx];
+
+        // Accept
+        if (top == "$" && curr == "$") {
+            cout << "Parsing successful!\n";
+            return true;
+        }
+
+        // If top is a terminal
+        if (table.find(top) == table.end()) {
+            if (top == curr) {
+                st.pop();
+                idx++;
+            } else {
+                cerr << "Syntax error: expected '" << top
+                     << "' but got '" << curr << "'\n";
+                return false;
+            }
+        }
+        // top is a non-terminal
+        else {
+            auto row = table.at(top);
+            if (row.count(curr)) {
+                vector<string> prod = row.at(curr);
+               
+
+                cout  << "Top of Stack = " <<  top << "\t\tInput buffer " << curr << endl;
+                cout  << "Applying " << top << "-> ";
+                for (auto &x : prod)
+                    cout << x;
+
+                cout << endl<< endl;
+
+                st.pop();
+                // push RHS in reverse, skipping epsilon
+                if (!(prod.size() == 1 && prod[0] == "ε")) {
+                    for (auto it = prod.rbegin(); it != prod.rend(); ++it)
+                        st.push(*it);
+                }
+            } else {
+                cout  << " terminal -> " << curr << " top -> " << top ;
+                cout << endl;
+                cout << "error: unexpected token '" << curr << "' while parsing " << nonTerminalMeaning(top) << "\n";
+                return false;
+            }
+        }
+    }
+
+    cerr << "Parsing failed: stack emptied early.\n";
+    return false;
+}
+
+int main() {
+    auto parsingTable = getParcingTable();
+
+    // 1) Read source
+    ifstream file("code.txt");
+    if (!file.is_open()) {
+        cerr << "Error opening file!\n";
+        return 1;
+    }
+    stringstream buffer;
+    buffer << file.rdbuf();
+    string sourceCode = buffer.str();
+
+    // 2) Lex
+    LexicalAnalyzer lexer(sourceCode);
+    vector<Token> lexed = lexer.tokenize();
+
     vector<string> tokens;
-    int i = 0;
-    while (i < prod.length()) {
-        bool matched = false;
-        // FOR ALL THE NON TERMINALS
-        for (const auto &symbol : order) { // order = all non-terminals and terminals
-            if (prod.substr(i, symbol.length()) == symbol) {
-                tokens.push_back(symbol);
-                i += symbol.length();
-                matched = true;
-                break;
-            }
-        }
-        // FOR ALL THE TERMINALS
-        if (!matched) {
+    for (auto &tk : lexed)
+        tokens.push_back(mapTokenToTerminal(tk));
+    tokens.push_back("$");
 
-            for (const auto &symbol : terminals) { // order = all non-terminals and terminals
-
-                if (prod.substr(i, symbol.length()) == symbol) {
-                    tokens.push_back(symbol);
-                    i += symbol.length();
-                    matched = true;
-                    break;
-                }
-            }
-        }
-        if (!matched) {
-            ++i;
-        }
+    // 3) Open log and redirect cout
+    ofstream logFile("parsinglogs.txt");
+    if (!logFile.is_open()) {
+        cerr << "Error opening parsinglogs.txt\n";
+        return 1;
     }
-    return tokens;
+    auto oldCoutBuf = cout.rdbuf();            // save console buffer
+    cout.rdbuf(logFile.rdbuf());               // redirect cout → logFile
+
+    // 4) Print tokens and run the parser (all cout here goes to the file)
+    cout << "Token sequence: ";
+    for (auto &s : tokens) cout << "'" << s << "' ";
+    cout << "\n\n";
+
+    bool ok = parseSequence(tokens, parsingTable, "S");
+
+    // 5) Restore cout back to console
+    cout.rdbuf(oldCoutBuf);
+
+    // 6) Print final verdict on the terminal
+    cout << (ok ? "ACCEPTED\n" : "REJECTED\n");
+    return 0;
 }
-
-void addNewRule(const string &prefix, const string &nt, vector<string> &production) {
-
-    cout << "Breaking down " << nt << " production with prefix " << prefix << "\n";
-
-    string rule = prefix + "T" + to_string(terminalAdded);
-    vector<string> newProudction;
-
-    for (int j = 0; j < cfgs[nt].size(); j++) {
-        string str = cfgs[nt][j];
-        auto it = find(production.begin(), production.end(), str);
-        if (it != production.end()) {
-            string newStr = str.substr(prefix.length());
-            if (newStr.empty()) {
-                newProudction.push_back(EPSILON); // explicitly add epsilon
-            } else if (newStr != EPSILON) {
-                newProudction.push_back(newStr);
-            }
-            cfgs[nt].erase(cfgs[nt].begin() + j);
-            j--;
-        }
-    }
-    cfgs[nt].push_back(rule);
-    cfgs["T" + to_string(terminalAdded)] = newProudction;
-    order.push_back("T" + to_string(terminalAdded));
-    cout << "Added new Non Terminal " << "T" + to_string(terminalAdded) << endl;
-    terminalAdded++;
-}
-
-void leftFactoring() {
-
-    // RUNNING THE LEFT FACTORING UNTIL THE GRAMMER CHANGED
-    while (true) {
-        // cout << "\nStarting left Factoring algorithm again\n";
-        bool change = false;
-
-        // RUNNING FOR THE PRODUCTION FOR EACH NON TERMINAL
-        for (auto &x : cfgs) {
-            string nt = x.first;
-            // cout << "Runnig for " << nt << endl;
-            sort(cfgs[nt].begin(), cfgs[nt].end());
-
-            vector<string> production = x.second;
-            int numberOfProduction = production.size();
-            // HAVE TO RUN THE ALGORITHM FOR ALL THE PARIS OF ALL THE LENGTH
-            // I.E IF NO COMMON PREFIX IN ALL PRODUCTION CHECK ON THEIR SUBSETS
-            bool isBrokenDown = false;
-            for (; numberOfProduction > 1; numberOfProduction--) {
-                for (int itr = 0; itr + numberOfProduction <= x.second.size(); itr++) { //  CREATING ALL THE PAIRS
-                    vector<string> currentProduction(production.begin() + itr, production.begin() + itr + numberOfProduction);
-                    if (currentProduction.size() > 1) {
-                        string prefix = longestCommonPrefix(currentProduction);
-                        // cout << "Prefix for " << nt << " " << prefix << endl;
-                        if (prefix != "") {
-                            change = true;
-                            addNewRule(prefix, nt, currentProduction);
-                            isBrokenDown = true;
-                            break;
-                        }
-                    }
-                }
-                if (isBrokenDown)
-                    break;
-            }
-        }
-
-        if (!change)
-            break;
-    }
-}
-
-void readCFG(const string &filename) {
-    ifstream file(filename);
-    string line;
-
-    int itr = 0;
-    while (getline(file, line)) {
-        istringstream iss(line);
-        string nt;
-        string arrow, prod;
-
-        if (!(iss >> nt >> arrow))
-            continue;
-
-        if (itr == 0) {
-            itr++;
-            if (nt != "S") {
-                cout << nt << endl;
-                cout << "Starting symbol must be S\n";
-                exit(1);
-            }
-        }
-
-        string str = "";
-        while (iss >> prod) {
-            if (prod == "|") {
-                // cout << str << endl;
-                cfgs[nt].push_back(str);
-                str = "";
-                continue;
-            } else {
-                str += prod;
-                if(str.length() == 5 && str == "orOpt"){ // converting orOpt in actual form
-                    str = "|";
-                }
-            }
-        }
-        cfgs[nt].push_back(str);
-        if (std::find(order.begin(), order.end(), nt) == order.end()) {
-            order.push_back(nt);
-        }
-        sort(cfgs[nt].begin(), cfgs[nt].end());
-    }
-}
-
-void displayCFG(unordered_map<string, vector<string>> mp = cfgs) {
-    for (const auto &nt : order) {
-        auto prods = cfgs[nt];
-        for (const auto &p : prods) {
-            cout << nt << " -> ";
-            for (char c : p) {
-                // if (c == 0x01)
-                //     cout << "ε";
-                // else
-                cout << c;
-            }
-            cout << endl;
-        }
-    }
-}
-
-void solveNonImmediateLR(string nameA, string nameB) {
-    // string nameA = A.getName();
-    // string nameB = B.getName();
-    vector<string> rulesA, rulesB, newRulesA;
-    rulesA = cfgs[nameA];
-    rulesB = cfgs[nameB];
-
-    for (auto rule : rulesA) {
-        if (rule.substr(0, nameB.size()) == nameB) {
-            for (auto rule1 : rulesB) {
-                newRulesA.push_back(rule1 + rule.substr(nameB.size()));
-            }
-        } else {
-            newRulesA.push_back(rule);
-        }
-    }
-    cfgs[nameA] = newRulesA;
-}
-
-// Algorithm for eliminating Immediate Left Recursion
-pair<string, vector<string>> solveImmediateLR(string name) {
-    string newName = "T" + to_string(terminalAdded);
-
-    vector<string> alphas, betas, rules, newRulesA, newRulesA1;
-    rules = cfgs[name];
-
-    // Checks if there is left recursion or not
-    for (auto rule : rules) {
-        if (rule.substr(0, name.size()) == name) {
-            alphas.push_back(rule.substr(name.size()));
-        } else {
-            betas.push_back(rule);
-        }
-    }
-
-    // If no left recursion, exit
-    if (!alphas.size())
-        return {};
-
-    if (!betas.size())
-        newRulesA.push_back(newName);
-
-    for (auto beta : betas)
-        newRulesA.push_back(beta + newName);
-
-    for (auto alpha : alphas)
-        newRulesA1.push_back(alpha + newName);
-
-    cfgs[name] = newRulesA;
-    newRulesA1.push_back(EPSILON);
-
-    terminalAdded++;
-    return {newName, newRulesA1};
-}
-
-// Eliminates left recursion
-void applyAlgorithm() {
-    int size = cfgs.size();
-
-    int i = 0;
-
-    vector<pair<string, vector<string>>> vec;
-
-    for (auto &x : cfgs) {
-        // int j = 0;
-        // for (auto &y : cfgs) {
-        //     solveNonImmediateLR(x.first, y.first);
-        //     j++;
-        //     if (j >= i)
-        //         break;
-        // }
-        pair<string, vector<string>> result = solveImmediateLR(x.first);
-        i++;
-        if (result.first.empty() && result.second.empty()) {
-            continue;
-        }
-        vec.push_back(result);
-    }
-
-    for (auto &x : vec) {
-        order.push_back(x.first);
-        cfgs.insert(x);
-    }
-}
-
-set<string> calculatingFirstOfOneProd(
-    string prod,
-    unordered_map<string, set<string>> firstsets) {
-
-    set<string> st;
-    string str;
-    bool isEpisilon = true;
-    auto isnonTerminal = false;
-    while (isEpisilon) {
-        isEpisilon = false;
-        isnonTerminal = false;
-        for (auto ch : prod) {
-            str += ch;
-            auto it = find(order.begin(), order.end(), str);
-            if (it != order.end()) {
-                isnonTerminal = true;
-
-                for (auto &y : firstsets[str]) {
-                    // IF THE FIRST OF NON TERMINAL IS EPSILON THEN WE HAVE TO LOOK FOR FIRST OF NEXT NON-TERMINAL
-                    if (y == EPSILON) {
-                        isEpisilon = true;
-                    } else
-                        st.insert(y);
-                }
-                prod = prod.substr(str.length());
-                if (prod.length() == 0 && isEpisilon) {
-                    st.insert(EPSILON);
-                }
-                str = "";
-                break;
-            }
-        }
-    }
-    if (!isnonTerminal) {
-        string matched_terminal = "";
-        for (const auto &t : terminals) {
-            if (prod.substr(0, t.size()) == t) {
-                if (t.size() > matched_terminal.size()) {
-                    matched_terminal = t;
-                }
-            }
-        }
-        if (!matched_terminal.empty()) {
-            st.insert(matched_terminal);
-            prod = prod.substr(matched_terminal.size());
-        } else {
-            // fallback if no terminal matches
-            // string s(1, prod[0]);
-            // st.insert(s);
-        }
-    }
-
-    return st;
-}
-
-void helper(string nt, unordered_map<string, set<string>> &firstsets, set<string> nonTerminal) {
-    vector<string> production = cfgs[nt];
-    set<string> st;
-
-    // LOOPING ALL THE RULES FOR ONE NON TERMINAL
-    for (auto &prod : production) {
-
-        // ENSURING IT IS TERMINAL OR NON TERMINAL
-        string str;
-        auto isnonTerminal = false;
-        bool isEpisilon = true;
-        while (isEpisilon) {
-            isnonTerminal = false;
-            isEpisilon = false;
-            vector<string> tokens = getTokensFromProd(prod);
-            for (auto ch : tokens) {
-                str += ch;
-                auto it = nonTerminal.find(str);
-                if (it != nonTerminal.end()) {
-                    // cout << nt << " -> " << prod << " Non Terminal\n";
-                    isnonTerminal = true;
-                    // FIRST SET OF THAT NON TERMINAL IS ALREADY THERE
-                    if (firstsets.find(str) == firstsets.end()) {
-                        helper(str, firstsets, nonTerminal);
-                    }
-
-                    for (auto &y : firstsets[str]) {
-                        // IF THE FIRST OF NON TERMINAL IS EPSILON THEN WE HAVE TO LOOK FOR FIRST OF NEXT NON-TERMINAL
-                        if (y == EPSILON) {
-                            isEpisilon = true;
-                        } else
-                            st.insert(y);
-                    }
-                    prod = prod.substr(str.length());
-                    if (prod.length() == 0 && isEpisilon) {
-                        st.insert(EPSILON);
-                    }
-                    str = "";
-                    break;
-                }
-            }
-        }
-        if (!isnonTerminal) {
-            string matched_terminal = "";
-            for (const auto &t : terminals) {
-                if (prod.substr(0, t.size()) == t) {
-                    if (t.size() > matched_terminal.size()) {
-                        matched_terminal = t;
-                    }
-                }
-            }
-            if (!matched_terminal.empty()) {
-                st.insert(matched_terminal);
-                prod = prod.substr(matched_terminal.size());
-            } else {
-                // // fallback if no terminal matches (should not happen ideally)
-                // string s(1, prod[0]);
-                // st.insert(s);
-            }
-        }
-    }
-    firstsets[nt] = st;
-}
-
-unordered_map<string, set<string>> calculateFirst() {
-
-    set<string> nonTerminal;
-    for (auto &x : cfgs) {
-        nonTerminal.insert(x.first);
-    }
-
-    unordered_map<string, set<string>> firstsets;
-    for (auto &x : cfgs) {
-        helper(x.first, firstsets, nonTerminal);
-    }
-    return firstsets;
-}
-
-void followHelper(
-    string prod, string nonTtoCalculate,
-    string nonterminal,
-    unordered_map<string, set<string>> &followsets,
-    unordered_map<string, set<string>> firstsets) {
-    // cout <<nonterminal << "-> "<< prod << " " << nonTtoCalculate<<endl;
-    auto isnonTerminal = false;
-    set<string> st;
-    bool isEpisilon = true;
-
-    if (prod == "") {
-        if (followsets.find(nonterminal) == followsets.end()) {
-            followHelper2(nonterminal, followsets, firstsets);
-        }
-        followsets[nonTtoCalculate].insert(followsets[nonterminal].begin(), followsets[nonterminal].end());
-        return;
-    }
-
-    while (isEpisilon) {
-
-        isnonTerminal = false;
-        isEpisilon = false;
-        string str;
-        for (auto ch : prod) {
-            str += ch;
-            auto it = find(order.begin(), order.end(), str); // checking if it is non-terminal or not
-
-            if (it != order.end()) {
-                isnonTerminal = true;
-                for (auto &y : firstsets[str]) {
-                    // IF THE FIRST OF NON TERMINAL IS EPSILON THEN WE HAVE TO LOOK FOR FIRST OF NEXT NON-TERMINAL
-                    if (y == EPSILON) {
-                        isEpisilon = true;
-                    } else
-                        st.insert(y);
-                }
-
-                prod = prod.substr(str.length());
-                if (prod.length() == 0 && isEpisilon) {
-                    if (followsets.find(nonterminal) == followsets.end()) {
-                        followHelper2(nonterminal, followsets, firstsets);
-                    }
-                    st.insert(followsets[nonterminal].begin(), followsets[nonterminal].end());
-                }
-                str = "";
-                break;
-            }
-        }
-    }
-    if (!isnonTerminal) {
-        string matched_terminal = "";
-        for (const auto &t : terminals) {
-            if (prod.substr(0, t.size()) == t) {
-                if (t.size() > matched_terminal.size()) {
-                    matched_terminal = t;
-                }
-            }
-        }
-        if (!matched_terminal.empty()) {
-            st.insert(matched_terminal);
-            prod = prod.substr(matched_terminal.size());
-        } else {
-            // fallback if no terminal matches
-            // string s(1, prod[0]);
-            // st.insert(s);
-        }
-    }
-    followsets[nonTtoCalculate].insert(st.begin(), st.end());
-}
-
-void followHelper2(
-    string x,
-    unordered_map<string, set<string>> &followSet,
-    unordered_map<string, set<string>> firstsets) {
-    // TRAVERSE OVER ALL THE PRODUCTION AND CHECK WHERE THE CURRENT NON TERMINAL IS USED
-    // cout << "Calculating follow of " << x << endl;
-    for (auto nt : order) {
-        vector<string> prod = cfgs[nt];
-        for (auto y : prod) {
-            int index = y.find(x);
-            if (index != string::npos) {
-                string temp = y.substr(index + x.length());
-                followHelper(temp, x, nt, followSet, firstsets);
-                if (x == "B")
-                    break;
-            }
-        }
-    }
-}
-
-unordered_map<string, set<string>> calculateFollow(unordered_map<string, set<string>> firstsets) {
-
-    unordered_map<string, set<string>> followSet;
-    followSet["S"].insert("$");
-    for (auto &x : order) {
-        if (x != "S" || followSet.find(x) == followSet.end())
-            followHelper2(x, followSet, firstsets);
-    }
-    return followSet;
-}
-
-void displayFirstFollow(unordered_map<string, set<string>> firstFollow) {
-    for (auto &x : firstFollow) {
-        cout << x.first << "-> ";
-        for (auto &y : x.second) {
-            cout << y << " ";
-        }
-        cout << endl;
-    }
-}
-
-unordered_map<string, unordered_map<string, string>> createParsingTable(
-    unordered_map<string, vector<string>> &cfgs,
-    unordered_map<string, set<string>> &firstsets,
-    unordered_map<string, set<string>> &follow) {
-    unordered_map<string, unordered_map<string, string>> table;
-
-    for (auto &nt : order) {
-        for (auto &production : cfgs[nt]) {
-            set<string> firstAlpha = calculatingFirstOfOneProd(production, firstsets);
-            for (auto &terminal : firstAlpha) {
-                if (terminal != EPSILON) {
-                    table[nt][terminal] = production;
-                }
-            }
-            if (firstAlpha.find(EPSILON) != firstAlpha.end()) {
-                for (auto &terminal : follow[nt]) {
-                    table[nt][terminal] = production;
-                }
-            }
-        }
-    }
-    return table;
-}
-
-void displayParsingTable(const unordered_map<string, unordered_map<string, string>> &table) {
-    set<string> terminals;
-    for (auto &entry : table) {
-        for (auto &cell : entry.second) {
-            terminals.insert(cell.first);
-        }
-    }
-
-    terminals.insert("$");
-    int width = 40;
-    cout << "\nLL(1) Parsing Table:\n";
-    cout << std::left;
-    cout << setw(width) << "";
-
-    for (auto term : terminals) {
-        cout << setw(width) << std::left << term;
-    }
-    cout << "\n"
-         << string(width * (terminals.size() + 1), '-') << "\n";
-
-    // Print each non-terminal row.
-    for (auto &nt : order) {
-        cout << setw(width) << std::left << nt;
-        for (auto term : terminals) {
-            if (table.count(nt) && table.at(nt).count(term)) {
-                cout << setw(width) << std::left << table.at(nt).at(term);
-            } else {
-                cout << setw(width) << std::left << "";
-            }
-        }
-        cout << endl;
-    }
-}
-
-void displayParsingTable(const unordered_map<string, unordered_map<string, vector<string>>> &table) {
-    set<string> terminals;
-
-    // Collect all terminals
-    for (auto &entry : table) {
-        for (auto &cell : entry.second) {
-            terminals.insert(cell.first);
-        }
-    }
-    terminals.insert("$"); // add end marker
-
-    int width = 40;
-    cout << "\nLL(1) Parsing Table:\n";
-    cout << std::left;
-    cout << setw(width) << "";
-
-    // Print all terminal headers
-    for (auto term : terminals) {
-        cout << setw(width) << std::left << term;
-    }
-    cout << "\n"
-         << string(width * (terminals.size() + 1), '-') << "\n";
-
-    // Print each non-terminal row
-    for (auto &nt : order) {
-        cout << setw(width) << std::left << nt;
-        for (auto term : terminals) {
-            if (table.count(nt) && table.at(nt).count(term)) {
-                string production;
-                for (const auto &sym : table.at(nt).at(term)) {
-                    production += sym + " ";
-                }
-                if (!production.empty() && production.back() == ' ') {
-                    production.pop_back(); // remove trailing space
-                }
-                cout << setw(width) << std::left << production;
-            } else {
-                cout << setw(width) << std::left << "";
-            }
-        }
-        cout << endl;
-    }
-}
-
-unordered_map<string, unordered_map<string, vector<string>>> changeTableShape(const unordered_map<string, unordered_map<string, string>> tabletemp) {
-
-    unordered_map<string, unordered_map<string, vector<string>>> table;
-
-    for (auto &x : tabletemp) {
-        string nonterminal = x.first;
-        for (auto &y : x.second) {
-            string terminal = y.first;
-            string prod = y.second;
-            vector<string> tokens = getTokensFromProd(prod);
-            // if (prod == "<type>id(<param_list>)<block>") {
-            //     cout << "\n\n\n<type>id(<param_list>)<block>  -->  ";
-            //     for (auto &t : tokens) {
-            //         cout << t << " ";
-            //     }
-            // }
-            table[nonterminal][terminal] = tokens;
-        }
-    }
-    return table;
-}
-
-unordered_map<string, unordered_map<string, vector<string>>> getParcingTable() {
-
-    readCFG("cfg.txt");
-
-    // freopen("output.txt", "w", stdout);
-
-    leftFactoring();
-    applyAlgorithm(); 
-
-    unordered_map<string, set<string>> firstsets = calculateFirst();
-
-    unordered_map<string, set<string>> follow = calculateFollow(firstsets);
-    unordered_map<string, unordered_map<string, string>> tabletemp = createParsingTable(cfgs, firstsets, follow);
-
-    return changeTableShape(tabletemp);
-}
-
-// int main() {
-
-//     readCFG("cfg.txt");
-
-//     freopen("output.txt", "w", stdout);
-
-//     cout << "Original CFG:\n";
-//     displayCFG();
-
-//     cout << endl
-//          << endl
-//          << endl;
-
-//     leftFactoring();
-//     cout << "\nLeft Factored CFG:\n";
-//     displayCFG();
-
-//     cout << endl
-//          << endl
-//          << endl;
-
-//     applyAlgorithm();
-//     cout << "\nLEFT RECURSION REMOVED CFG:\n";
-//     displayCFG();
-
-//     unordered_map<string, set<string>> firstsets = calculateFirst();
-//     cout << "\n\n FIRST SETS\n";
-//     displayFirstFollow(firstsets);
-//     cout << endl
-//          << endl
-//          << endl;
-
-//     unordered_map<string, set<string>> follow = calculateFollow(firstsets);
-//     cout << "\n\n FOLLOW SETS\n";
-//     displayFirstFollow(follow);
-
-//     unordered_map<string, unordered_map<string, string>> table = createParsingTable(cfgs, firstsets, follow);
-//     displayParsingTable(table);
-
-//     cout << "TABLE # 2 \n";
-//     displayParsingTable(changeTableShape(table));
-
-//     for (auto &x : terminals) {
-//         cout << x << " ";
-//     }
-// }

@@ -1,0 +1,1269 @@
+Token sequence: 'int' 'main' '(' ')' '{' 'int' 'id' '=' 'num' ';' 'int' 'id' '=' 'num' ';' 'id' '=' 'id' '+' 'num' '+' 'num' '+' 'num' '*' 'num' '/' 'num' '%' 'id' '+' '(' 'num' '+' 'id' ')' ';' 'if' '(' 'id' '>' 'num' ')' '{' 'id' '=' 'num' ';' 'while' '(' 'id' '>' 'num' '&' 'id' '>' 'num' ')' '{' 'id' '=' 'id' '+' 'num' ';' '}' 'for' '(' 'int' 'id' '=' 'num' ';' 'id' '<' 'num' '|' 'id' '>' 'num' '&' 'id' '!=' 'num' '|' 'id' '@' 'num' ';' 'id' '=' 'id' '+' 'num' ')' '{' 'for' '(' 'int' 'id' '=' 'num' ';' ';' 'id' '=' 'id' '+' 'num' ')' '{' '}' '}' '}' 'else' '{' 'for' '(' 'int' 'id' '=' 'num' ';' 'id' '<' 'num' '|' 'id' '>' 'num' ';' 'id' '=' 'id' '+' 'num' ')' '{' 'for' '(' 'int' 'id' '=' 'num' ';' ';' 'id' '=' 'id' '+' 'num' ')' '{' '}' '}' '}' 'id' '=' 'id' '+' 'num' ';' '}' '$' 
+
+Top of Stack = S		Input buffer int
+Applying S-> intmain(){<stmt_list>}
+
+Top of Stack = <stmt_list>		Input buffer int
+Applying <stmt_list>-> <stmt><stmt_list>
+
+Top of Stack = <stmt>		Input buffer int
+Applying <stmt>-> <decl_stmt>
+
+Top of Stack = <decl_stmt>		Input buffer int
+Applying <decl_stmt>-> <type>id<decl_assign_opt>;
+
+Top of Stack = <type>		Input buffer int
+Applying <type>-> int
+
+Top of Stack = <decl_assign_opt>		Input buffer =
+Applying <decl_assign_opt>-> =<expr>
+
+Top of Stack = <expr>		Input buffer num
+Applying <expr>-> <logical_or_expr>
+
+Top of Stack = <logical_or_expr>		Input buffer num
+Applying <logical_or_expr>-> <logical_and_expr><logical_or_expr_tail>
+
+Top of Stack = <logical_and_expr>		Input buffer num
+Applying <logical_and_expr>-> <relational_expr><logical_and_expr_tail>
+
+Top of Stack = <relational_expr>		Input buffer num
+Applying <relational_expr>-> <simple_expr><relop_opt>
+
+Top of Stack = <simple_expr>		Input buffer num
+Applying <simple_expr>-> <term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer num
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer num
+Applying <factor>-> num
+
+Top of Stack = <term_tail>		Input buffer ;
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer ;
+Applying <simple_expr_tail>-> ε
+
+Top of Stack = <relop_opt>		Input buffer ;
+Applying <relop_opt>-> ε
+
+Top of Stack = <logical_and_expr_tail>		Input buffer ;
+Applying <logical_and_expr_tail>-> ε
+
+Top of Stack = <logical_or_expr_tail>		Input buffer ;
+Applying <logical_or_expr_tail>-> ε
+
+Top of Stack = <stmt_list>		Input buffer int
+Applying <stmt_list>-> <stmt><stmt_list>
+
+Top of Stack = <stmt>		Input buffer int
+Applying <stmt>-> <decl_stmt>
+
+Top of Stack = <decl_stmt>		Input buffer int
+Applying <decl_stmt>-> <type>id<decl_assign_opt>;
+
+Top of Stack = <type>		Input buffer int
+Applying <type>-> int
+
+Top of Stack = <decl_assign_opt>		Input buffer =
+Applying <decl_assign_opt>-> =<expr>
+
+Top of Stack = <expr>		Input buffer num
+Applying <expr>-> <logical_or_expr>
+
+Top of Stack = <logical_or_expr>		Input buffer num
+Applying <logical_or_expr>-> <logical_and_expr><logical_or_expr_tail>
+
+Top of Stack = <logical_and_expr>		Input buffer num
+Applying <logical_and_expr>-> <relational_expr><logical_and_expr_tail>
+
+Top of Stack = <relational_expr>		Input buffer num
+Applying <relational_expr>-> <simple_expr><relop_opt>
+
+Top of Stack = <simple_expr>		Input buffer num
+Applying <simple_expr>-> <term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer num
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer num
+Applying <factor>-> num
+
+Top of Stack = <term_tail>		Input buffer ;
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer ;
+Applying <simple_expr_tail>-> ε
+
+Top of Stack = <relop_opt>		Input buffer ;
+Applying <relop_opt>-> ε
+
+Top of Stack = <logical_and_expr_tail>		Input buffer ;
+Applying <logical_and_expr_tail>-> ε
+
+Top of Stack = <logical_or_expr_tail>		Input buffer ;
+Applying <logical_or_expr_tail>-> ε
+
+Top of Stack = <stmt_list>		Input buffer id
+Applying <stmt_list>-> <stmt><stmt_list>
+
+Top of Stack = <stmt>		Input buffer id
+Applying <stmt>-> <assign_stmt>
+
+Top of Stack = <assign_stmt>		Input buffer id
+Applying <assign_stmt>-> id=<expr>;
+
+Top of Stack = <expr>		Input buffer id
+Applying <expr>-> <logical_or_expr>
+
+Top of Stack = <logical_or_expr>		Input buffer id
+Applying <logical_or_expr>-> <logical_and_expr><logical_or_expr_tail>
+
+Top of Stack = <logical_and_expr>		Input buffer id
+Applying <logical_and_expr>-> <relational_expr><logical_and_expr_tail>
+
+Top of Stack = <relational_expr>		Input buffer id
+Applying <relational_expr>-> <simple_expr><relop_opt>
+
+Top of Stack = <simple_expr>		Input buffer id
+Applying <simple_expr>-> <term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer id
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer id
+Applying <factor>-> id
+
+Top of Stack = <term_tail>		Input buffer +
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer +
+Applying <simple_expr_tail>-> +<term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer num
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer num
+Applying <factor>-> num
+
+Top of Stack = <term_tail>		Input buffer +
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer +
+Applying <simple_expr_tail>-> +<term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer num
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer num
+Applying <factor>-> num
+
+Top of Stack = <term_tail>		Input buffer +
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer +
+Applying <simple_expr_tail>-> +<term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer num
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer num
+Applying <factor>-> num
+
+Top of Stack = <term_tail>		Input buffer *
+Applying <term_tail>-> *<factor><term_tail>
+
+Top of Stack = <factor>		Input buffer num
+Applying <factor>-> num
+
+Top of Stack = <term_tail>		Input buffer /
+Applying <term_tail>-> /<factor><term_tail>
+
+Top of Stack = <factor>		Input buffer num
+Applying <factor>-> num
+
+Top of Stack = <term_tail>		Input buffer %
+Applying <term_tail>-> %<factor><term_tail>
+
+Top of Stack = <factor>		Input buffer id
+Applying <factor>-> id
+
+Top of Stack = <term_tail>		Input buffer +
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer +
+Applying <simple_expr_tail>-> +<term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer (
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer (
+Applying <factor>-> (<expr>)
+
+Top of Stack = <expr>		Input buffer num
+Applying <expr>-> <logical_or_expr>
+
+Top of Stack = <logical_or_expr>		Input buffer num
+Applying <logical_or_expr>-> <logical_and_expr><logical_or_expr_tail>
+
+Top of Stack = <logical_and_expr>		Input buffer num
+Applying <logical_and_expr>-> <relational_expr><logical_and_expr_tail>
+
+Top of Stack = <relational_expr>		Input buffer num
+Applying <relational_expr>-> <simple_expr><relop_opt>
+
+Top of Stack = <simple_expr>		Input buffer num
+Applying <simple_expr>-> <term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer num
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer num
+Applying <factor>-> num
+
+Top of Stack = <term_tail>		Input buffer +
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer +
+Applying <simple_expr_tail>-> +<term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer id
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer id
+Applying <factor>-> id
+
+Top of Stack = <term_tail>		Input buffer )
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer )
+Applying <simple_expr_tail>-> ε
+
+Top of Stack = <relop_opt>		Input buffer )
+Applying <relop_opt>-> ε
+
+Top of Stack = <logical_and_expr_tail>		Input buffer )
+Applying <logical_and_expr_tail>-> ε
+
+Top of Stack = <logical_or_expr_tail>		Input buffer )
+Applying <logical_or_expr_tail>-> ε
+
+Top of Stack = <term_tail>		Input buffer ;
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer ;
+Applying <simple_expr_tail>-> ε
+
+Top of Stack = <relop_opt>		Input buffer ;
+Applying <relop_opt>-> ε
+
+Top of Stack = <logical_and_expr_tail>		Input buffer ;
+Applying <logical_and_expr_tail>-> ε
+
+Top of Stack = <logical_or_expr_tail>		Input buffer ;
+Applying <logical_or_expr_tail>-> ε
+
+Top of Stack = <stmt_list>		Input buffer if
+Applying <stmt_list>-> <stmt><stmt_list>
+
+Top of Stack = <stmt>		Input buffer if
+Applying <stmt>-> if(<expr>){<stmt_list>}<else_opt>
+
+Top of Stack = <expr>		Input buffer id
+Applying <expr>-> <logical_or_expr>
+
+Top of Stack = <logical_or_expr>		Input buffer id
+Applying <logical_or_expr>-> <logical_and_expr><logical_or_expr_tail>
+
+Top of Stack = <logical_and_expr>		Input buffer id
+Applying <logical_and_expr>-> <relational_expr><logical_and_expr_tail>
+
+Top of Stack = <relational_expr>		Input buffer id
+Applying <relational_expr>-> <simple_expr><relop_opt>
+
+Top of Stack = <simple_expr>		Input buffer id
+Applying <simple_expr>-> <term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer id
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer id
+Applying <factor>-> id
+
+Top of Stack = <term_tail>		Input buffer >
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer >
+Applying <simple_expr_tail>-> ε
+
+Top of Stack = <relop_opt>		Input buffer >
+Applying <relop_opt>-> <relop><simple_expr>
+
+Top of Stack = <relop>		Input buffer >
+Applying <relop>-> >
+
+Top of Stack = <simple_expr>		Input buffer num
+Applying <simple_expr>-> <term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer num
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer num
+Applying <factor>-> num
+
+Top of Stack = <term_tail>		Input buffer )
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer )
+Applying <simple_expr_tail>-> ε
+
+Top of Stack = <logical_and_expr_tail>		Input buffer )
+Applying <logical_and_expr_tail>-> ε
+
+Top of Stack = <logical_or_expr_tail>		Input buffer )
+Applying <logical_or_expr_tail>-> ε
+
+Top of Stack = <stmt_list>		Input buffer id
+Applying <stmt_list>-> <stmt><stmt_list>
+
+Top of Stack = <stmt>		Input buffer id
+Applying <stmt>-> <assign_stmt>
+
+Top of Stack = <assign_stmt>		Input buffer id
+Applying <assign_stmt>-> id=<expr>;
+
+Top of Stack = <expr>		Input buffer num
+Applying <expr>-> <logical_or_expr>
+
+Top of Stack = <logical_or_expr>		Input buffer num
+Applying <logical_or_expr>-> <logical_and_expr><logical_or_expr_tail>
+
+Top of Stack = <logical_and_expr>		Input buffer num
+Applying <logical_and_expr>-> <relational_expr><logical_and_expr_tail>
+
+Top of Stack = <relational_expr>		Input buffer num
+Applying <relational_expr>-> <simple_expr><relop_opt>
+
+Top of Stack = <simple_expr>		Input buffer num
+Applying <simple_expr>-> <term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer num
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer num
+Applying <factor>-> num
+
+Top of Stack = <term_tail>		Input buffer ;
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer ;
+Applying <simple_expr_tail>-> ε
+
+Top of Stack = <relop_opt>		Input buffer ;
+Applying <relop_opt>-> ε
+
+Top of Stack = <logical_and_expr_tail>		Input buffer ;
+Applying <logical_and_expr_tail>-> ε
+
+Top of Stack = <logical_or_expr_tail>		Input buffer ;
+Applying <logical_or_expr_tail>-> ε
+
+Top of Stack = <stmt_list>		Input buffer while
+Applying <stmt_list>-> <stmt><stmt_list>
+
+Top of Stack = <stmt>		Input buffer while
+Applying <stmt>-> while(<expr>){<stmt_list>}
+
+Top of Stack = <expr>		Input buffer id
+Applying <expr>-> <logical_or_expr>
+
+Top of Stack = <logical_or_expr>		Input buffer id
+Applying <logical_or_expr>-> <logical_and_expr><logical_or_expr_tail>
+
+Top of Stack = <logical_and_expr>		Input buffer id
+Applying <logical_and_expr>-> <relational_expr><logical_and_expr_tail>
+
+Top of Stack = <relational_expr>		Input buffer id
+Applying <relational_expr>-> <simple_expr><relop_opt>
+
+Top of Stack = <simple_expr>		Input buffer id
+Applying <simple_expr>-> <term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer id
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer id
+Applying <factor>-> id
+
+Top of Stack = <term_tail>		Input buffer >
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer >
+Applying <simple_expr_tail>-> ε
+
+Top of Stack = <relop_opt>		Input buffer >
+Applying <relop_opt>-> <relop><simple_expr>
+
+Top of Stack = <relop>		Input buffer >
+Applying <relop>-> >
+
+Top of Stack = <simple_expr>		Input buffer num
+Applying <simple_expr>-> <term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer num
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer num
+Applying <factor>-> num
+
+Top of Stack = <term_tail>		Input buffer &
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer &
+Applying <simple_expr_tail>-> ε
+
+Top of Stack = <logical_and_expr_tail>		Input buffer &
+Applying <logical_and_expr_tail>-> &<relational_expr><logical_and_expr_tail>
+
+Top of Stack = <relational_expr>		Input buffer id
+Applying <relational_expr>-> <simple_expr><relop_opt>
+
+Top of Stack = <simple_expr>		Input buffer id
+Applying <simple_expr>-> <term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer id
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer id
+Applying <factor>-> id
+
+Top of Stack = <term_tail>		Input buffer >
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer >
+Applying <simple_expr_tail>-> ε
+
+Top of Stack = <relop_opt>		Input buffer >
+Applying <relop_opt>-> <relop><simple_expr>
+
+Top of Stack = <relop>		Input buffer >
+Applying <relop>-> >
+
+Top of Stack = <simple_expr>		Input buffer num
+Applying <simple_expr>-> <term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer num
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer num
+Applying <factor>-> num
+
+Top of Stack = <term_tail>		Input buffer )
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer )
+Applying <simple_expr_tail>-> ε
+
+Top of Stack = <logical_and_expr_tail>		Input buffer )
+Applying <logical_and_expr_tail>-> ε
+
+Top of Stack = <logical_or_expr_tail>		Input buffer )
+Applying <logical_or_expr_tail>-> ε
+
+Top of Stack = <stmt_list>		Input buffer id
+Applying <stmt_list>-> <stmt><stmt_list>
+
+Top of Stack = <stmt>		Input buffer id
+Applying <stmt>-> <assign_stmt>
+
+Top of Stack = <assign_stmt>		Input buffer id
+Applying <assign_stmt>-> id=<expr>;
+
+Top of Stack = <expr>		Input buffer id
+Applying <expr>-> <logical_or_expr>
+
+Top of Stack = <logical_or_expr>		Input buffer id
+Applying <logical_or_expr>-> <logical_and_expr><logical_or_expr_tail>
+
+Top of Stack = <logical_and_expr>		Input buffer id
+Applying <logical_and_expr>-> <relational_expr><logical_and_expr_tail>
+
+Top of Stack = <relational_expr>		Input buffer id
+Applying <relational_expr>-> <simple_expr><relop_opt>
+
+Top of Stack = <simple_expr>		Input buffer id
+Applying <simple_expr>-> <term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer id
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer id
+Applying <factor>-> id
+
+Top of Stack = <term_tail>		Input buffer +
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer +
+Applying <simple_expr_tail>-> +<term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer num
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer num
+Applying <factor>-> num
+
+Top of Stack = <term_tail>		Input buffer ;
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer ;
+Applying <simple_expr_tail>-> ε
+
+Top of Stack = <relop_opt>		Input buffer ;
+Applying <relop_opt>-> ε
+
+Top of Stack = <logical_and_expr_tail>		Input buffer ;
+Applying <logical_and_expr_tail>-> ε
+
+Top of Stack = <logical_or_expr_tail>		Input buffer ;
+Applying <logical_or_expr_tail>-> ε
+
+Top of Stack = <stmt_list>		Input buffer }
+Applying <stmt_list>-> ε
+
+Top of Stack = <stmt_list>		Input buffer for
+Applying <stmt_list>-> <stmt><stmt_list>
+
+Top of Stack = <stmt>		Input buffer for
+Applying <stmt>-> for(<for_init><for_check>;<for_iter>){<stmt_list>}
+
+Top of Stack = <for_init>		Input buffer int
+Applying <for_init>-> <decl_stmt>
+
+Top of Stack = <decl_stmt>		Input buffer int
+Applying <decl_stmt>-> <type>id<decl_assign_opt>;
+
+Top of Stack = <type>		Input buffer int
+Applying <type>-> int
+
+Top of Stack = <decl_assign_opt>		Input buffer =
+Applying <decl_assign_opt>-> =<expr>
+
+Top of Stack = <expr>		Input buffer num
+Applying <expr>-> <logical_or_expr>
+
+Top of Stack = <logical_or_expr>		Input buffer num
+Applying <logical_or_expr>-> <logical_and_expr><logical_or_expr_tail>
+
+Top of Stack = <logical_and_expr>		Input buffer num
+Applying <logical_and_expr>-> <relational_expr><logical_and_expr_tail>
+
+Top of Stack = <relational_expr>		Input buffer num
+Applying <relational_expr>-> <simple_expr><relop_opt>
+
+Top of Stack = <simple_expr>		Input buffer num
+Applying <simple_expr>-> <term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer num
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer num
+Applying <factor>-> num
+
+Top of Stack = <term_tail>		Input buffer ;
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer ;
+Applying <simple_expr_tail>-> ε
+
+Top of Stack = <relop_opt>		Input buffer ;
+Applying <relop_opt>-> ε
+
+Top of Stack = <logical_and_expr_tail>		Input buffer ;
+Applying <logical_and_expr_tail>-> ε
+
+Top of Stack = <logical_or_expr_tail>		Input buffer ;
+Applying <logical_or_expr_tail>-> ε
+
+Top of Stack = <for_check>		Input buffer id
+Applying <for_check>-> <expr>
+
+Top of Stack = <expr>		Input buffer id
+Applying <expr>-> <logical_or_expr>
+
+Top of Stack = <logical_or_expr>		Input buffer id
+Applying <logical_or_expr>-> <logical_and_expr><logical_or_expr_tail>
+
+Top of Stack = <logical_and_expr>		Input buffer id
+Applying <logical_and_expr>-> <relational_expr><logical_and_expr_tail>
+
+Top of Stack = <relational_expr>		Input buffer id
+Applying <relational_expr>-> <simple_expr><relop_opt>
+
+Top of Stack = <simple_expr>		Input buffer id
+Applying <simple_expr>-> <term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer id
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer id
+Applying <factor>-> id
+
+Top of Stack = <term_tail>		Input buffer <
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer <
+Applying <simple_expr_tail>-> ε
+
+Top of Stack = <relop_opt>		Input buffer <
+Applying <relop_opt>-> <relop><simple_expr>
+
+Top of Stack = <relop>		Input buffer <
+Applying <relop>-> <
+
+Top of Stack = <simple_expr>		Input buffer num
+Applying <simple_expr>-> <term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer num
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer num
+Applying <factor>-> num
+
+Top of Stack = <term_tail>		Input buffer |
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer |
+Applying <simple_expr_tail>-> ε
+
+Top of Stack = <logical_and_expr_tail>		Input buffer |
+Applying <logical_and_expr_tail>-> ε
+
+Top of Stack = <logical_or_expr_tail>		Input buffer |
+Applying <logical_or_expr_tail>-> |<logical_and_expr><logical_or_expr_tail>
+
+Top of Stack = <logical_and_expr>		Input buffer id
+Applying <logical_and_expr>-> <relational_expr><logical_and_expr_tail>
+
+Top of Stack = <relational_expr>		Input buffer id
+Applying <relational_expr>-> <simple_expr><relop_opt>
+
+Top of Stack = <simple_expr>		Input buffer id
+Applying <simple_expr>-> <term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer id
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer id
+Applying <factor>-> id
+
+Top of Stack = <term_tail>		Input buffer >
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer >
+Applying <simple_expr_tail>-> ε
+
+Top of Stack = <relop_opt>		Input buffer >
+Applying <relop_opt>-> <relop><simple_expr>
+
+Top of Stack = <relop>		Input buffer >
+Applying <relop>-> >
+
+Top of Stack = <simple_expr>		Input buffer num
+Applying <simple_expr>-> <term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer num
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer num
+Applying <factor>-> num
+
+Top of Stack = <term_tail>		Input buffer &
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer &
+Applying <simple_expr_tail>-> ε
+
+Top of Stack = <logical_and_expr_tail>		Input buffer &
+Applying <logical_and_expr_tail>-> &<relational_expr><logical_and_expr_tail>
+
+Top of Stack = <relational_expr>		Input buffer id
+Applying <relational_expr>-> <simple_expr><relop_opt>
+
+Top of Stack = <simple_expr>		Input buffer id
+Applying <simple_expr>-> <term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer id
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer id
+Applying <factor>-> id
+
+Top of Stack = <term_tail>		Input buffer !=
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer !=
+Applying <simple_expr_tail>-> ε
+
+Top of Stack = <relop_opt>		Input buffer !=
+Applying <relop_opt>-> <relop><simple_expr>
+
+Top of Stack = <relop>		Input buffer !=
+Applying <relop>-> !=
+
+Top of Stack = <simple_expr>		Input buffer num
+Applying <simple_expr>-> <term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer num
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer num
+Applying <factor>-> num
+
+Top of Stack = <term_tail>		Input buffer |
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer |
+Applying <simple_expr_tail>-> ε
+
+Top of Stack = <logical_and_expr_tail>		Input buffer |
+Applying <logical_and_expr_tail>-> ε
+
+Top of Stack = <logical_or_expr_tail>		Input buffer |
+Applying <logical_or_expr_tail>-> |<logical_and_expr><logical_or_expr_tail>
+
+Top of Stack = <logical_and_expr>		Input buffer id
+Applying <logical_and_expr>-> <relational_expr><logical_and_expr_tail>
+
+Top of Stack = <relational_expr>		Input buffer id
+Applying <relational_expr>-> <simple_expr><relop_opt>
+
+Top of Stack = <simple_expr>		Input buffer id
+Applying <simple_expr>-> <term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer id
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer id
+Applying <factor>-> id
+
+Top of Stack = <term_tail>		Input buffer @
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer @
+Applying <simple_expr_tail>-> ε
+
+Top of Stack = <relop_opt>		Input buffer @
+Applying <relop_opt>-> <relop><simple_expr>
+
+Top of Stack = <relop>		Input buffer @
+Applying <relop>-> @
+
+Top of Stack = <simple_expr>		Input buffer num
+Applying <simple_expr>-> <term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer num
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer num
+Applying <factor>-> num
+
+Top of Stack = <term_tail>		Input buffer ;
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer ;
+Applying <simple_expr_tail>-> ε
+
+Top of Stack = <logical_and_expr_tail>		Input buffer ;
+Applying <logical_and_expr_tail>-> ε
+
+Top of Stack = <logical_or_expr_tail>		Input buffer ;
+Applying <logical_or_expr_tail>-> ε
+
+Top of Stack = <for_iter>		Input buffer id
+Applying <for_iter>-> <assign_stmt_for>
+
+Top of Stack = <assign_stmt_for>		Input buffer id
+Applying <assign_stmt_for>-> id=<simple_expr>
+
+Top of Stack = <simple_expr>		Input buffer id
+Applying <simple_expr>-> <term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer id
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer id
+Applying <factor>-> id
+
+Top of Stack = <term_tail>		Input buffer +
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer +
+Applying <simple_expr_tail>-> +<term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer num
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer num
+Applying <factor>-> num
+
+Top of Stack = <term_tail>		Input buffer )
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer )
+Applying <simple_expr_tail>-> ε
+
+Top of Stack = <stmt_list>		Input buffer for
+Applying <stmt_list>-> <stmt><stmt_list>
+
+Top of Stack = <stmt>		Input buffer for
+Applying <stmt>-> for(<for_init><for_check>;<for_iter>){<stmt_list>}
+
+Top of Stack = <for_init>		Input buffer int
+Applying <for_init>-> <decl_stmt>
+
+Top of Stack = <decl_stmt>		Input buffer int
+Applying <decl_stmt>-> <type>id<decl_assign_opt>;
+
+Top of Stack = <type>		Input buffer int
+Applying <type>-> int
+
+Top of Stack = <decl_assign_opt>		Input buffer =
+Applying <decl_assign_opt>-> =<expr>
+
+Top of Stack = <expr>		Input buffer num
+Applying <expr>-> <logical_or_expr>
+
+Top of Stack = <logical_or_expr>		Input buffer num
+Applying <logical_or_expr>-> <logical_and_expr><logical_or_expr_tail>
+
+Top of Stack = <logical_and_expr>		Input buffer num
+Applying <logical_and_expr>-> <relational_expr><logical_and_expr_tail>
+
+Top of Stack = <relational_expr>		Input buffer num
+Applying <relational_expr>-> <simple_expr><relop_opt>
+
+Top of Stack = <simple_expr>		Input buffer num
+Applying <simple_expr>-> <term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer num
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer num
+Applying <factor>-> num
+
+Top of Stack = <term_tail>		Input buffer ;
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer ;
+Applying <simple_expr_tail>-> ε
+
+Top of Stack = <relop_opt>		Input buffer ;
+Applying <relop_opt>-> ε
+
+Top of Stack = <logical_and_expr_tail>		Input buffer ;
+Applying <logical_and_expr_tail>-> ε
+
+Top of Stack = <logical_or_expr_tail>		Input buffer ;
+Applying <logical_or_expr_tail>-> ε
+
+Top of Stack = <for_check>		Input buffer ;
+Applying <for_check>-> ε
+
+Top of Stack = <for_iter>		Input buffer id
+Applying <for_iter>-> <assign_stmt_for>
+
+Top of Stack = <assign_stmt_for>		Input buffer id
+Applying <assign_stmt_for>-> id=<simple_expr>
+
+Top of Stack = <simple_expr>		Input buffer id
+Applying <simple_expr>-> <term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer id
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer id
+Applying <factor>-> id
+
+Top of Stack = <term_tail>		Input buffer +
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer +
+Applying <simple_expr_tail>-> +<term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer num
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer num
+Applying <factor>-> num
+
+Top of Stack = <term_tail>		Input buffer )
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer )
+Applying <simple_expr_tail>-> ε
+
+Top of Stack = <stmt_list>		Input buffer }
+Applying <stmt_list>-> ε
+
+Top of Stack = <stmt_list>		Input buffer }
+Applying <stmt_list>-> ε
+
+Top of Stack = <stmt_list>		Input buffer }
+Applying <stmt_list>-> ε
+
+Top of Stack = <else_opt>		Input buffer else
+Applying <else_opt>-> else{<stmt_list>}
+
+Top of Stack = <stmt_list>		Input buffer for
+Applying <stmt_list>-> <stmt><stmt_list>
+
+Top of Stack = <stmt>		Input buffer for
+Applying <stmt>-> for(<for_init><for_check>;<for_iter>){<stmt_list>}
+
+Top of Stack = <for_init>		Input buffer int
+Applying <for_init>-> <decl_stmt>
+
+Top of Stack = <decl_stmt>		Input buffer int
+Applying <decl_stmt>-> <type>id<decl_assign_opt>;
+
+Top of Stack = <type>		Input buffer int
+Applying <type>-> int
+
+Top of Stack = <decl_assign_opt>		Input buffer =
+Applying <decl_assign_opt>-> =<expr>
+
+Top of Stack = <expr>		Input buffer num
+Applying <expr>-> <logical_or_expr>
+
+Top of Stack = <logical_or_expr>		Input buffer num
+Applying <logical_or_expr>-> <logical_and_expr><logical_or_expr_tail>
+
+Top of Stack = <logical_and_expr>		Input buffer num
+Applying <logical_and_expr>-> <relational_expr><logical_and_expr_tail>
+
+Top of Stack = <relational_expr>		Input buffer num
+Applying <relational_expr>-> <simple_expr><relop_opt>
+
+Top of Stack = <simple_expr>		Input buffer num
+Applying <simple_expr>-> <term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer num
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer num
+Applying <factor>-> num
+
+Top of Stack = <term_tail>		Input buffer ;
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer ;
+Applying <simple_expr_tail>-> ε
+
+Top of Stack = <relop_opt>		Input buffer ;
+Applying <relop_opt>-> ε
+
+Top of Stack = <logical_and_expr_tail>		Input buffer ;
+Applying <logical_and_expr_tail>-> ε
+
+Top of Stack = <logical_or_expr_tail>		Input buffer ;
+Applying <logical_or_expr_tail>-> ε
+
+Top of Stack = <for_check>		Input buffer id
+Applying <for_check>-> <expr>
+
+Top of Stack = <expr>		Input buffer id
+Applying <expr>-> <logical_or_expr>
+
+Top of Stack = <logical_or_expr>		Input buffer id
+Applying <logical_or_expr>-> <logical_and_expr><logical_or_expr_tail>
+
+Top of Stack = <logical_and_expr>		Input buffer id
+Applying <logical_and_expr>-> <relational_expr><logical_and_expr_tail>
+
+Top of Stack = <relational_expr>		Input buffer id
+Applying <relational_expr>-> <simple_expr><relop_opt>
+
+Top of Stack = <simple_expr>		Input buffer id
+Applying <simple_expr>-> <term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer id
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer id
+Applying <factor>-> id
+
+Top of Stack = <term_tail>		Input buffer <
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer <
+Applying <simple_expr_tail>-> ε
+
+Top of Stack = <relop_opt>		Input buffer <
+Applying <relop_opt>-> <relop><simple_expr>
+
+Top of Stack = <relop>		Input buffer <
+Applying <relop>-> <
+
+Top of Stack = <simple_expr>		Input buffer num
+Applying <simple_expr>-> <term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer num
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer num
+Applying <factor>-> num
+
+Top of Stack = <term_tail>		Input buffer |
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer |
+Applying <simple_expr_tail>-> ε
+
+Top of Stack = <logical_and_expr_tail>		Input buffer |
+Applying <logical_and_expr_tail>-> ε
+
+Top of Stack = <logical_or_expr_tail>		Input buffer |
+Applying <logical_or_expr_tail>-> |<logical_and_expr><logical_or_expr_tail>
+
+Top of Stack = <logical_and_expr>		Input buffer id
+Applying <logical_and_expr>-> <relational_expr><logical_and_expr_tail>
+
+Top of Stack = <relational_expr>		Input buffer id
+Applying <relational_expr>-> <simple_expr><relop_opt>
+
+Top of Stack = <simple_expr>		Input buffer id
+Applying <simple_expr>-> <term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer id
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer id
+Applying <factor>-> id
+
+Top of Stack = <term_tail>		Input buffer >
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer >
+Applying <simple_expr_tail>-> ε
+
+Top of Stack = <relop_opt>		Input buffer >
+Applying <relop_opt>-> <relop><simple_expr>
+
+Top of Stack = <relop>		Input buffer >
+Applying <relop>-> >
+
+Top of Stack = <simple_expr>		Input buffer num
+Applying <simple_expr>-> <term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer num
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer num
+Applying <factor>-> num
+
+Top of Stack = <term_tail>		Input buffer ;
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer ;
+Applying <simple_expr_tail>-> ε
+
+Top of Stack = <logical_and_expr_tail>		Input buffer ;
+Applying <logical_and_expr_tail>-> ε
+
+Top of Stack = <logical_or_expr_tail>		Input buffer ;
+Applying <logical_or_expr_tail>-> ε
+
+Top of Stack = <for_iter>		Input buffer id
+Applying <for_iter>-> <assign_stmt_for>
+
+Top of Stack = <assign_stmt_for>		Input buffer id
+Applying <assign_stmt_for>-> id=<simple_expr>
+
+Top of Stack = <simple_expr>		Input buffer id
+Applying <simple_expr>-> <term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer id
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer id
+Applying <factor>-> id
+
+Top of Stack = <term_tail>		Input buffer +
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer +
+Applying <simple_expr_tail>-> +<term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer num
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer num
+Applying <factor>-> num
+
+Top of Stack = <term_tail>		Input buffer )
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer )
+Applying <simple_expr_tail>-> ε
+
+Top of Stack = <stmt_list>		Input buffer for
+Applying <stmt_list>-> <stmt><stmt_list>
+
+Top of Stack = <stmt>		Input buffer for
+Applying <stmt>-> for(<for_init><for_check>;<for_iter>){<stmt_list>}
+
+Top of Stack = <for_init>		Input buffer int
+Applying <for_init>-> <decl_stmt>
+
+Top of Stack = <decl_stmt>		Input buffer int
+Applying <decl_stmt>-> <type>id<decl_assign_opt>;
+
+Top of Stack = <type>		Input buffer int
+Applying <type>-> int
+
+Top of Stack = <decl_assign_opt>		Input buffer =
+Applying <decl_assign_opt>-> =<expr>
+
+Top of Stack = <expr>		Input buffer num
+Applying <expr>-> <logical_or_expr>
+
+Top of Stack = <logical_or_expr>		Input buffer num
+Applying <logical_or_expr>-> <logical_and_expr><logical_or_expr_tail>
+
+Top of Stack = <logical_and_expr>		Input buffer num
+Applying <logical_and_expr>-> <relational_expr><logical_and_expr_tail>
+
+Top of Stack = <relational_expr>		Input buffer num
+Applying <relational_expr>-> <simple_expr><relop_opt>
+
+Top of Stack = <simple_expr>		Input buffer num
+Applying <simple_expr>-> <term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer num
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer num
+Applying <factor>-> num
+
+Top of Stack = <term_tail>		Input buffer ;
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer ;
+Applying <simple_expr_tail>-> ε
+
+Top of Stack = <relop_opt>		Input buffer ;
+Applying <relop_opt>-> ε
+
+Top of Stack = <logical_and_expr_tail>		Input buffer ;
+Applying <logical_and_expr_tail>-> ε
+
+Top of Stack = <logical_or_expr_tail>		Input buffer ;
+Applying <logical_or_expr_tail>-> ε
+
+Top of Stack = <for_check>		Input buffer ;
+Applying <for_check>-> ε
+
+Top of Stack = <for_iter>		Input buffer id
+Applying <for_iter>-> <assign_stmt_for>
+
+Top of Stack = <assign_stmt_for>		Input buffer id
+Applying <assign_stmt_for>-> id=<simple_expr>
+
+Top of Stack = <simple_expr>		Input buffer id
+Applying <simple_expr>-> <term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer id
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer id
+Applying <factor>-> id
+
+Top of Stack = <term_tail>		Input buffer +
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer +
+Applying <simple_expr_tail>-> +<term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer num
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer num
+Applying <factor>-> num
+
+Top of Stack = <term_tail>		Input buffer )
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer )
+Applying <simple_expr_tail>-> ε
+
+Top of Stack = <stmt_list>		Input buffer }
+Applying <stmt_list>-> ε
+
+Top of Stack = <stmt_list>		Input buffer }
+Applying <stmt_list>-> ε
+
+Top of Stack = <stmt_list>		Input buffer }
+Applying <stmt_list>-> ε
+
+Top of Stack = <stmt_list>		Input buffer id
+Applying <stmt_list>-> <stmt><stmt_list>
+
+Top of Stack = <stmt>		Input buffer id
+Applying <stmt>-> <assign_stmt>
+
+Top of Stack = <assign_stmt>		Input buffer id
+Applying <assign_stmt>-> id=<expr>;
+
+Top of Stack = <expr>		Input buffer id
+Applying <expr>-> <logical_or_expr>
+
+Top of Stack = <logical_or_expr>		Input buffer id
+Applying <logical_or_expr>-> <logical_and_expr><logical_or_expr_tail>
+
+Top of Stack = <logical_and_expr>		Input buffer id
+Applying <logical_and_expr>-> <relational_expr><logical_and_expr_tail>
+
+Top of Stack = <relational_expr>		Input buffer id
+Applying <relational_expr>-> <simple_expr><relop_opt>
+
+Top of Stack = <simple_expr>		Input buffer id
+Applying <simple_expr>-> <term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer id
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer id
+Applying <factor>-> id
+
+Top of Stack = <term_tail>		Input buffer +
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer +
+Applying <simple_expr_tail>-> +<term><simple_expr_tail>
+
+Top of Stack = <term>		Input buffer num
+Applying <term>-> <factor><term_tail>
+
+Top of Stack = <factor>		Input buffer num
+Applying <factor>-> num
+
+Top of Stack = <term_tail>		Input buffer ;
+Applying <term_tail>-> ε
+
+Top of Stack = <simple_expr_tail>		Input buffer ;
+Applying <simple_expr_tail>-> ε
+
+Top of Stack = <relop_opt>		Input buffer ;
+Applying <relop_opt>-> ε
+
+Top of Stack = <logical_and_expr_tail>		Input buffer ;
+Applying <logical_and_expr_tail>-> ε
+
+Top of Stack = <logical_or_expr_tail>		Input buffer ;
+Applying <logical_or_expr_tail>-> ε
+
+Top of Stack = <stmt_list>		Input buffer }
+Applying <stmt_list>-> ε
+
+Parsing successful!
